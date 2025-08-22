@@ -4,7 +4,7 @@ namespace AuthService.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<AuthResultDto> RegisterAsync(RegisterDto dto);
-        Task<AuthResultDto> LoginAsync(LoginDto dto);
+        Task<ResultDto<string>> RegisterAsync(RegisterDto dto);
+        Task<ResultDto<string>> LoginAsync(LoginDto dto);
     }
 }

@@ -21,25 +21,25 @@ namespace AuthService.Application.Services
             _tokenService = tokenService;
         }
 
-        public async Task<AuthResultDto> LoginAsync(LoginDto dto)
+        public async Task<ResultDto<string>> LoginAsync(LoginDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
-                return new AuthResultDto { Success = false, Errors = new[] { "Invalid credentials" } };
+                return new ResultDto<string> { Success = false, Errors = new[] { "Invalid credentials" } };
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: false);
             if (!result.Succeeded)
-                return new AuthResultDto { Success = false, Errors = new[] { "Invalid credentials" } };
+                return new ResultDto<string> { Success = false, Errors = new[] { "Invalid credentials" } };
 
             var token = await _tokenService.GenerateTokenAsync(user);
-            return new AuthResultDto { Success = true, Token = token };
+            return new ResultDto<string> { Success = true, Result = token };
         }
 
-        public async Task<AuthResultDto> RegisterAsync(RegisterDto dto)
+        public async Task<ResultDto<string>> RegisterAsync(RegisterDto dto)
         {
             var existing = await _userManager.FindByNameAsync(dto.Username);
             if (existing != null)
-                return new AuthResultDto { Success = false, Errors = new[] { "Username already exists" } };
+                return new ResultDto<string> { Success = false, Errors = new[] { "Username already exists" } };
 
             var user = new User
             {
@@ -51,10 +51,10 @@ namespace AuthService.Application.Services
 
             var createResult = await _userManager.CreateAsync(user, dto.Password);
             if (!createResult.Succeeded)
-                return new AuthResultDto { Success = false, Errors = createResult.Errors.Select(e => e.Description) };
+                return new ResultDto<string> { Success = false, Errors = createResult.Errors.Select(e => e.Description) };
 
             var token = await _tokenService.GenerateTokenAsync(user);
-            return new AuthResultDto { Success = true, Token = token };
+            return new ResultDto<string> { Success = true, Result = token };
         }
     }
 }

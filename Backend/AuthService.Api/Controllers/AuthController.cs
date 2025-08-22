@@ -19,14 +19,14 @@ namespace AuthService.Api.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
             var result = await _userService.RegisterAsync(dto);
-            return result.Success ? Ok(result) : BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             var result = await _userService.LoginAsync(dto);
-            return result.Success ? Ok(result) : Unauthorized(result);
+            return Ok(result);
         }
     }
 }
