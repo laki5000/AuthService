@@ -4,6 +4,6 @@ namespace AuthService.Application.Interfaces
 {
     public interface ITokenService
     {
-        Task<string> GenerateTokenAsync(User user);
+        Task<string> GenerateTokenAsync(User user, IEnumerable<string> roles);
     }
 }

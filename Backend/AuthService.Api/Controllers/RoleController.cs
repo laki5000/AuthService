@@ -1,4 +1,5 @@
 ﻿using AuthService.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Api.Controllers
@@ -15,6 +16,7 @@ namespace AuthService.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] string roleName)
         {
             var result = await _roleService.CreateAsync(roleName);
@@ -22,6 +24,7 @@ namespace AuthService.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var result = await _roleService.GetAllAsync();

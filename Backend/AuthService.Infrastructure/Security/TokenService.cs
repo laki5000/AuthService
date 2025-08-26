@@ -2,6 +2,7 @@
 using AuthService.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,18 +18,22 @@ namespace AuthService.Infrastructure.Security
             _config = config;
         }
 
-        public Task<string> GenerateTokenAsync(User user)
+        public Task<string> GenerateTokenAsync(User user, IEnumerable<string> roles)
         {
             var jwtSection = _config.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
-        {
-            new(JwtRegisteredClaimNames.Sub, user.Id),
-            new(JwtRegisteredClaimNames.UniqueName, user.UserName ?? ""),
-            new(JwtRegisteredClaimNames.Email, user.Email ?? "")
-        };
+            {
+                new(JwtRegisteredClaimNames.Sub, user.Id),
+                new(JwtRegisteredClaimNames.UniqueName, user.UserName ?? ""),
+                new(JwtRegisteredClaimNames.Email, user.Email ?? "")
+            };
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: jwtSection["Issuer"],

@@ -2,21 +2,25 @@
 using AuthService.Domain.DTOs;
 using AuthService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace AuthService.Application.Services
 {
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenService _tokenService;
 
         public UserService(
         UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager,
         SignInManager<User> signInManager,
         ITokenService tokenService)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
         }
@@ -25,13 +29,15 @@ namespace AuthService.Application.Services
         {
             var user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
-                return new ResultDto<string> { Success = false, Errors = new[] { "Invalid credentials" } };
+                return new ResultDto<string> { Success = false, Errors = new[] { "Invalid credentials" }, StatusCode = (int)HttpStatusCode.Unauthorized };
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: false);
             if (!result.Succeeded)
-                return new ResultDto<string> { Success = false, Errors = new[] { "Invalid credentials" } };
+                return new ResultDto<string> { Success = false, Errors = new[] { "Invalid credentials" }, StatusCode = (int)HttpStatusCode.Unauthorized };
 
-            var token = await _tokenService.GenerateTokenAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var token = await _tokenService.GenerateTokenAsync(user, roles);
             return new ResultDto<string> { Success = true, Result = token };
         }
 
@@ -39,7 +45,7 @@ namespace AuthService.Application.Services
         {
             var existing = await _userManager.FindByNameAsync(dto.Username);
             if (existing != null)
-                return new ResultDto<string> { Success = false, Errors = new[] { "Username already exists" } };
+                return new ResultDto<string> { Success = false, Errors = new[] { "Username already exists" }, StatusCode = (int)HttpStatusCode.Conflict };
 
             var user = new User
             {
@@ -51,10 +57,42 @@ namespace AuthService.Application.Services
 
             var createResult = await _userManager.CreateAsync(user, dto.Password);
             if (!createResult.Succeeded)
-                return new ResultDto<string> { Success = false, Errors = createResult.Errors.Select(e => e.Description) };
+                return new ResultDto<string> { Success = false, Errors = createResult.Errors.Select(e => e.Description), StatusCode = (int)HttpStatusCode.BadRequest };
 
-            var token = await _tokenService.GenerateTokenAsync(user);
-            return new ResultDto<string> { Success = true, Result = token };
+            var token = await _tokenService.GenerateTokenAsync(user, Enumerable.Empty<string>());
+            return new ResultDto<string> { Success = true, Result = token, StatusCode = (int)HttpStatusCode.Created };
+        }
+
+        public async Task<ResultDto<string>> UpdateUserRole(string username, string role, bool add)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return new ResultDto<string> { Success = false, Errors = new[] { "User not found" }, StatusCode = 404 };
+            }
+
+            if (!await _roleManager.RoleExistsAsync(role))
+            {
+                return new ResultDto<string> { Success = false, Errors = new[] { $"Role '{role}' does not exist." }, StatusCode = 404 };
+            }
+
+            IdentityResult result;
+
+            if (add)
+            {
+                result = await _userManager.AddToRoleAsync(user, role);
+            }
+            else
+            {
+                result = await _userManager.RemoveFromRoleAsync(user, role);
+            }
+
+            if (!result.Succeeded)
+            {
+                return new ResultDto<string> { Success = false, Errors = result.Errors.Select(e => e.Description).ToArray(), StatusCode = 400 };
+            }
+
+            return new ResultDto<string> { Success = true, StatusCode = 200 };
         }
     }
 }

@@ -1,5 +1,6 @@
 using AuthService.Application.Interfaces;
 using AuthService.Application.Services;
+using AuthService.Infrastructure.Middleware;
 using AuthService.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -55,6 +57,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Middlewares
+app.UseMiddleware<JwtCookieMiddleware>();
+app.UseMiddleware<CustomResponseMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
