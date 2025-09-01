@@ -1,4 +1,5 @@
-﻿using AuthService.Application.Interfaces;
+﻿using AuthService.Application.Constants;
+using AuthService.Application.Interfaces;
 using AuthService.Domain.DTOs;
 using AuthService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -29,11 +30,11 @@ namespace AuthService.Application.Services
         {
             var user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
-                return new ResultDto<string> { Success = false, Errors = new[] { "Invalid credentials" }, StatusCode = (int)HttpStatusCode.Unauthorized };
+                return new ResultDto<string> { Success = false, Errors = new[] { ErrorMessages.InvalidCredentials }, StatusCode = (int)HttpStatusCode.Unauthorized };
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: false);
             if (!result.Succeeded)
-                return new ResultDto<string> { Success = false, Errors = new[] { "Invalid credentials" }, StatusCode = (int)HttpStatusCode.Unauthorized };
+                return new ResultDto<string> { Success = false, Errors = new[] { ErrorMessages.InvalidCredentials }, StatusCode = (int)HttpStatusCode.Unauthorized };
 
             var roles = await _userManager.GetRolesAsync(user);
 
@@ -45,7 +46,7 @@ namespace AuthService.Application.Services
         {
             var existing = await _userManager.FindByNameAsync(dto.Username);
             if (existing != null)
-                return new ResultDto<string> { Success = false, Errors = new[] { "Username already exists" }, StatusCode = (int)HttpStatusCode.Conflict };
+                return new ResultDto<string> { Success = false, Errors = new[] { ErrorMessages.UsernameAlreadyExists }, StatusCode = (int)HttpStatusCode.Conflict };
 
             var user = new User
             {
@@ -68,12 +69,12 @@ namespace AuthService.Application.Services
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
-                return new ResultDto<string> { Success = false, Errors = new[] { "User not found" }, StatusCode = 404 };
+                return new ResultDto<string> { Success = false, Errors = new[] { ErrorMessages.UserNotFound }, StatusCode = 404 };
             }
 
             if (!await _roleManager.RoleExistsAsync(role))
             {
-                return new ResultDto<string> { Success = false, Errors = new[] { $"Role '{role}' does not exist." }, StatusCode = 404 };
+                return new ResultDto<string> { Success = false, Errors = new[] { ErrorMessages.RoleDoesNotExist(role) }, StatusCode = 404 };
             }
 
             IdentityResult result;
