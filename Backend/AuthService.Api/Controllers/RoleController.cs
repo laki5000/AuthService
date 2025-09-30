@@ -1,4 +1,5 @@
 ﻿using AuthService.Application.Interfaces;
+using AuthService.Domain.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,10 +26,11 @@ namespace AuthService.Api.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll()
+        [ProducesResponseType(typeof(ResultDto<IEnumerable<string>>), StatusCodes.Status200OK)]
+        public IActionResult GetAll()
         {
-            var result = await _roleService.GetAllAsync();
+            var result = _roleService.GetAll();
             return Ok(result);
-        } 
+        }
     }
 }
