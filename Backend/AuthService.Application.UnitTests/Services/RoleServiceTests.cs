@@ -38,10 +38,10 @@ namespace AuthService.Application.UnitTests.Services
         [Fact]
         public async Task CreateAsync_WhenRoleAlreadyExists_ShouldReturnError()
         {
-            _roleManagerMock.Setup(x => x.RoleExistsAsync(Consts.TEST_ROLE1))
+            _roleManagerMock.Setup(x => x.RoleExistsAsync(Constants.TEST_ROLE1))
                 .ReturnsAsync(true);
 
-            var result = await _roleService.CreateAsync(Consts.TEST_ROLE1);
+            var result = await _roleService.CreateAsync(Constants.TEST_ROLE1);
 
             result.Success.Should().BeFalse();
             result.Errors.Should().Contain(ErrorMessages.RoleAlreadyExists);
@@ -50,30 +50,30 @@ namespace AuthService.Application.UnitTests.Services
         [Fact]
         public async Task CreateAsync_WhenRoleCreationFails_ShouldReturnIdentityErrors()
         {
-            var identityErrors = new IdentityError[] { new IdentityError { Description = Consts.ERROR_MESSAGE } };
-            _roleManagerMock.Setup(x => x.RoleExistsAsync(Consts.TEST_ROLE1))
+            var identityErrors = new IdentityError[] { new IdentityError { Description = Constants.ERROR_MESSAGE } };
+            _roleManagerMock.Setup(x => x.RoleExistsAsync(Constants.TEST_ROLE1))
                 .ReturnsAsync(false);
             _roleManagerMock.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>()))
                 .ReturnsAsync(IdentityResult.Failed(identityErrors));
 
-            var result = await _roleService.CreateAsync(Consts.TEST_ROLE1);
+            var result = await _roleService.CreateAsync(Constants.TEST_ROLE1);
 
             result.Success.Should().BeFalse();
-            result.Errors.Should().Contain(Consts.ERROR_MESSAGE);
+            result.Errors.Should().Contain(Constants.ERROR_MESSAGE);
         }
 
         [Fact]
         public async Task CreateAsync_WhenRoleCreationSucceeds_ShouldReturnSuccess()
         {
-            _roleManagerMock.Setup(x => x.RoleExistsAsync(Consts.TEST_ROLE1))
+            _roleManagerMock.Setup(x => x.RoleExistsAsync(Constants.TEST_ROLE1))
                 .ReturnsAsync(false);
             _roleManagerMock.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>()))
                 .ReturnsAsync(IdentityResult.Success);
 
-            var result = await _roleService.CreateAsync(Consts.TEST_ROLE1);
+            var result = await _roleService.CreateAsync(Constants.TEST_ROLE1);
 
             result.Success.Should().BeTrue();
-            result.Result.Should().Be(Consts.TEST_ROLE1);
+            result.Result.Should().Be(Constants.TEST_ROLE1);
         }
 
         [Fact]
@@ -81,8 +81,8 @@ namespace AuthService.Application.UnitTests.Services
         {
             var roles = new List<IdentityRole>
             {
-                new IdentityRole(Consts.TEST_ROLE1),
-                new IdentityRole(Consts.TEST_ROLE2)
+                new IdentityRole(Constants.TEST_ROLE1),
+                new IdentityRole(Constants.TEST_ROLE2)
             }.AsQueryable();
 
             _roleManagerMock.Setup(r => r.Roles).Returns(roles);
@@ -91,7 +91,7 @@ namespace AuthService.Application.UnitTests.Services
 
             result.Success.Should().BeTrue();
             result.Result.Should().HaveCount(2);
-            result.Result.Should().Contain([Consts.TEST_ROLE1, Consts.TEST_ROLE2]);
+            result.Result.Should().Contain([Constants.TEST_ROLE1, Constants.TEST_ROLE2]);
         }
 
         [Fact]

@@ -1,6 +1,6 @@
 ﻿namespace AuthService.Application.UnitTests
 {
-    public static class Consts
+    public static class Constants
     {
         public const string EXISTING_USERNAME = "existing";
         public const string NEW_USERNAME = "newuser";

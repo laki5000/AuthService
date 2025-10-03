@@ -38,7 +38,7 @@ namespace AuthService.Application.Services
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            var token = await _tokenService.GenerateTokenAsync(user, roles);
+            var token = _tokenService.GenerateToken(user, roles);
             return new ResultDto<string> { Success = true, Result = token };
         }
 
@@ -60,7 +60,7 @@ namespace AuthService.Application.Services
             if (!createResult.Succeeded)
                 return new ResultDto<string> { Success = false, Errors = createResult.Errors.Select(e => e.Description), StatusCode = (int)HttpStatusCode.BadRequest };
 
-            var token = await _tokenService.GenerateTokenAsync(user, Enumerable.Empty<string>());
+            var token = _tokenService.GenerateToken(user, Enumerable.Empty<string>());
             return new ResultDto<string> { Success = true, Result = token, StatusCode = (int)HttpStatusCode.Created };
         }
 

@@ -60,7 +60,7 @@ namespace AuthService.Application.UnitTests.Services
         [Fact]
         public async Task LoginAsync_WithInvalidUsername_ShouldReturnUnauthorized()
         {
-            var dto = new LoginDto { Username = Consts.NONEXISTENT_USERNAME, Password = Consts.VALID_PASSWORD };
+            var dto = new LoginDto { Username = Constants.NONEXISTENT_USERNAME, Password = Constants.VALID_PASSWORD };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username))
                             .ReturnsAsync((User?)null);
 
@@ -74,8 +74,8 @@ namespace AuthService.Application.UnitTests.Services
         [Fact]
         public async Task LoginAsync_WithWrongPassword_ShouldReturnUnauthorized()
         {
-            var user = new User { UserName = Consts.EXISTING_USERNAME };
-            var dto = new LoginDto { Username = Consts.EXISTING_USERNAME, Password = Consts.INVALID_PASSWORD };
+            var user = new User { UserName = Constants.EXISTING_USERNAME };
+            var dto = new LoginDto { Username = Constants.EXISTING_USERNAME, Password = Constants.INVALID_PASSWORD };
 
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username))
                             .ReturnsAsync(user);
@@ -92,10 +92,10 @@ namespace AuthService.Application.UnitTests.Services
         [Fact]
         public async Task LoginAsync_WithValidCredentials_ShouldReturnToken()
         {
-            var user = new User { UserName = Consts.EXISTING_USERNAME };
-            var roles = new List<string> { Consts.TEST_ROLE1, Consts.TEST_ROLE2 };
-            var token = Consts.JWT_TOKEN;
-            var dto = new LoginDto { Username = Consts.EXISTING_USERNAME, Password = Consts.VALID_PASSWORD };
+            var user = new User { UserName = Constants.EXISTING_USERNAME };
+            var roles = new List<string> { Constants.TEST_ROLE1, Constants.TEST_ROLE2 };
+            var token = Constants.JWT_TOKEN;
+            var dto = new LoginDto { Username = Constants.EXISTING_USERNAME, Password = Constants.VALID_PASSWORD };
 
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username))
                             .ReturnsAsync(user);
@@ -103,8 +103,8 @@ namespace AuthService.Application.UnitTests.Services
                               .ReturnsAsync(SignInResult.Success);
             _userManagerMock.Setup(u => u.GetRolesAsync(user))
                             .ReturnsAsync(roles);
-            _tokenServiceMock.Setup(t => t.GenerateTokenAsync(user, roles))
-                             .ReturnsAsync(token);
+            _tokenServiceMock.Setup(t => t.GenerateToken(user, roles))
+                             .Returns(token);
 
             var result = await _userService.LoginAsync(dto);
 
@@ -115,7 +115,7 @@ namespace AuthService.Application.UnitTests.Services
         [Fact]
         public async Task RegisterAsync_WhenUsernameAlreadyExists_ShouldReturnConflict()
         {
-            var dto = new RegisterDto { Username = Consts.EXISTING_USERNAME };
+            var dto = new RegisterDto { Username = Constants.EXISTING_USERNAME };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username))
                             .ReturnsAsync(new User());
 
@@ -129,47 +129,47 @@ namespace AuthService.Application.UnitTests.Services
         [Fact]
         public async Task RegisterAsync_WhenCreateFails_ShouldReturnBadRequest()
         {
-            var dto = new RegisterDto { Username = Consts.NEW_USERNAME, Password = Consts.VALID_PASSWORD };
+            var dto = new RegisterDto { Username = Constants.NEW_USERNAME, Password = Constants.VALID_PASSWORD };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username))
                             .ReturnsAsync((User?)null);
 
             _userManagerMock.Setup(u => u.CreateAsync(It.IsAny<User>(), dto.Password))
-                            .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = Consts.ERROR_MESSAGE }));
+                            .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = Constants.ERROR_MESSAGE }));
 
             var result = await _userService.RegisterAsync(dto);
 
             result.Success.Should().BeFalse();
-            result.Errors.Should().Contain(Consts.ERROR_MESSAGE);
+            result.Errors.Should().Contain(Constants.ERROR_MESSAGE);
             result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task RegisterAsync_WhenSuccessful_ShouldReturnCreatedAndToken()
         {
-            var dto = new RegisterDto { Username = Consts.NEW_USERNAME, Password = Consts.VALID_PASSWORD };
+            var dto = new RegisterDto { Username = Constants.NEW_USERNAME, Password = Constants.VALID_PASSWORD };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username))
                             .ReturnsAsync((User?)null);
 
             _userManagerMock.Setup(u => u.CreateAsync(It.IsAny<User>(), dto.Password))
                             .ReturnsAsync(IdentityResult.Success);
 
-            _tokenServiceMock.Setup(t => t.GenerateTokenAsync(It.IsAny<User>(), It.IsAny<IEnumerable<string>>()))
-                             .ReturnsAsync(Consts.JWT_TOKEN);
+            _tokenServiceMock.Setup(t => t.GenerateToken(It.IsAny<User>(), It.IsAny<IEnumerable<string>>()))
+                             .Returns(Constants.JWT_TOKEN);
 
             var result = await _userService.RegisterAsync(dto);
 
             result.Success.Should().BeTrue();
-            result.Result.Should().Be(Consts.JWT_TOKEN);
+            result.Result.Should().Be(Constants.JWT_TOKEN);
             result.StatusCode.Should().Be((int)HttpStatusCode.Created);
         }
 
         [Fact]
         public async Task UpdateUserRole_WhenUserNotFound_ShouldReturnNotFound()
         {
-            _userManagerMock.Setup(u => u.FindByNameAsync(Consts.NONEXISTENT_USERNAME))
+            _userManagerMock.Setup(u => u.FindByNameAsync(Constants.NONEXISTENT_USERNAME))
                             .ReturnsAsync((User?)null);
 
-            var result = await _userService.UpdateUserRole(Consts.NONEXISTENT_USERNAME, Consts.TEST_ROLE1, true);
+            var result = await _userService.UpdateUserRole(Constants.NONEXISTENT_USERNAME, Constants.TEST_ROLE1, true);
 
             result.Success.Should().BeFalse();
             result.Errors.Should().Contain(ErrorMessages.UserNotFound);
@@ -179,45 +179,45 @@ namespace AuthService.Application.UnitTests.Services
         [Fact]
         public async Task UpdateUserRole_WhenRoleDoesNotExist_ShouldReturnNotFound()
         {
-            var user = new User { UserName = Consts.EXISTING_USERNAME };
-            _userManagerMock.Setup(u => u.FindByNameAsync(Consts.EXISTING_USERNAME)).ReturnsAsync(user);
-            _roleManagerMock.Setup(r => r.RoleExistsAsync(Consts.NONEXISTENT_ROLE)).ReturnsAsync(false);
+            var user = new User { UserName = Constants.EXISTING_USERNAME };
+            _userManagerMock.Setup(u => u.FindByNameAsync(Constants.EXISTING_USERNAME)).ReturnsAsync(user);
+            _roleManagerMock.Setup(r => r.RoleExistsAsync(Constants.NONEXISTENT_ROLE)).ReturnsAsync(false);
 
-            var result = await _userService.UpdateUserRole(Consts.EXISTING_USERNAME, Consts.NONEXISTENT_ROLE, true);
+            var result = await _userService.UpdateUserRole(Constants.EXISTING_USERNAME, Constants.NONEXISTENT_ROLE, true);
 
             result.Success.Should().BeFalse();
-            result.Errors.Should().Contain(ErrorMessages.RoleDoesNotExist(Consts.NONEXISTENT_ROLE));
+            result.Errors.Should().Contain(ErrorMessages.RoleDoesNotExist(Constants.NONEXISTENT_ROLE));
             result.StatusCode.Should().Be(404);
         }
 
         [Fact]
         public async Task UpdateUserRole_WhenAddOrRemoveFails_ShouldReturnBadRequest()
         {
-            var user = new User { UserName = Consts.EXISTING_USERNAME };
-            _userManagerMock.Setup(u => u.FindByNameAsync(Consts.EXISTING_USERNAME)).ReturnsAsync(user);
-            _roleManagerMock.Setup(r => r.RoleExistsAsync(Consts.TEST_ROLE1)).ReturnsAsync(true);
+            var user = new User { UserName = Constants.EXISTING_USERNAME };
+            _userManagerMock.Setup(u => u.FindByNameAsync(Constants.EXISTING_USERNAME)).ReturnsAsync(user);
+            _roleManagerMock.Setup(r => r.RoleExistsAsync(Constants.TEST_ROLE1)).ReturnsAsync(true);
 
-            _userManagerMock.Setup(u => u.AddToRoleAsync(user, Consts.TEST_ROLE1))
-                            .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = Consts.ERROR_MESSAGE }));
+            _userManagerMock.Setup(u => u.AddToRoleAsync(user, Constants.TEST_ROLE1))
+                            .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = Constants.ERROR_MESSAGE }));
 
-            var result = await _userService.UpdateUserRole(Consts.EXISTING_USERNAME, Consts.TEST_ROLE1, true);
+            var result = await _userService.UpdateUserRole(Constants.EXISTING_USERNAME, Constants.TEST_ROLE1, true);
 
             result.Success.Should().BeFalse();
-            result.Errors.Should().Contain(Consts.ERROR_MESSAGE);
+            result.Errors.Should().Contain(Constants.ERROR_MESSAGE);
             result.StatusCode.Should().Be(400);
         }
 
         [Fact]
         public async Task UpdateUserRole_WhenAddOrRemoveSucceeds_ShouldReturnOk()
         {
-            var user = new User { UserName = Consts.EXISTING_USERNAME };
-            _userManagerMock.Setup(u => u.FindByNameAsync(Consts.EXISTING_USERNAME)).ReturnsAsync(user);
-            _roleManagerMock.Setup(r => r.RoleExistsAsync(Consts.TEST_ROLE1)).ReturnsAsync(true);
+            var user = new User { UserName = Constants.EXISTING_USERNAME };
+            _userManagerMock.Setup(u => u.FindByNameAsync(Constants.EXISTING_USERNAME)).ReturnsAsync(user);
+            _roleManagerMock.Setup(r => r.RoleExistsAsync(Constants.TEST_ROLE1)).ReturnsAsync(true);
 
-            _userManagerMock.Setup(u => u.AddToRoleAsync(user, Consts.TEST_ROLE1))
+            _userManagerMock.Setup(u => u.AddToRoleAsync(user, Constants.TEST_ROLE1))
                             .ReturnsAsync(IdentityResult.Success);
 
-            var result = await _userService.UpdateUserRole(Consts.EXISTING_USERNAME, Consts.TEST_ROLE1, true);
+            var result = await _userService.UpdateUserRole(Constants.EXISTING_USERNAME, Constants.TEST_ROLE1, true);
 
             result.Success.Should().BeTrue();
             result.StatusCode.Should().Be(200);
