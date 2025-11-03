@@ -1,6 +1,7 @@
 ﻿using AuthService.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
-namespace AuthService.Application.Interfaces
+namespace AuthService.Application.Interfaces.Services
 {
     public interface ITokenService
     {

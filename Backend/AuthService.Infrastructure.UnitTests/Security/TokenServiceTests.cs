@@ -35,7 +35,7 @@ namespace AuthService.Infrastructure.UnitTests.Security
                 UserName = Constants.USERNAME,
                 Email = Constants.EMAIL
             };
-            var roles = new List<string> { Constants.ROLE1 ,Constants.ROLE2 };
+            var roles = new List<string> { Constants.ROLE1, Constants.ROLE2 };
 
             var tokenString = _tokenService.GenerateToken(user, roles);
 

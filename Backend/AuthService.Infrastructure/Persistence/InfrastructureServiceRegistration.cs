@@ -1,4 +1,4 @@
-﻿using AuthService.Application.Interfaces;
+﻿using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.Entities;
 using AuthService.Infrastructure.Identity;
 using AuthService.Infrastructure.Security;
@@ -26,6 +26,7 @@ namespace AuthService.Infrastructure.Persistence
             .AddSignInManager<SignInManager<User>>();
 
             services.AddScoped<ITokenService, TokenService>();
+            services.AddSingleton<ITokenHeaderService, TokenHeaderService>();
 
             return services;
         }

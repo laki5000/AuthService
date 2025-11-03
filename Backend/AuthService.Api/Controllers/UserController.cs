@@ -1,4 +1,4 @@
-﻿using AuthService.Application.Interfaces;
+﻿using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

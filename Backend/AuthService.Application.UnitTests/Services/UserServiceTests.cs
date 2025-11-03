@@ -1,5 +1,5 @@
 ﻿using AuthService.Application.Constants;
-using AuthService.Application.Interfaces;
+using AuthService.Application.Interfaces.Services;
 using AuthService.Application.Services;
 using AuthService.Domain.DTOs;
 using AuthService.Domain.Entities;
@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using System.Net;
 
 namespace AuthService.Application.UnitTests.Services
 {
@@ -23,7 +22,8 @@ namespace AuthService.Application.UnitTests.Services
 
         private readonly UserService _userService;
 
-        public UserServiceTests() {
+        public UserServiceTests()
+        {
             _userManagerMock = new Mock<UserManager<User>>(
                 new Mock<IUserStore<User>>().Object,
                 new Mock<IOptions<IdentityOptions>>().Object,
@@ -68,7 +68,7 @@ namespace AuthService.Application.UnitTests.Services
 
             result.Success.Should().BeFalse();
             result.Errors.Should().Contain(ErrorMessages.InvalidCredentials);
-            result.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
+            result.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace AuthService.Application.UnitTests.Services
 
             result.Success.Should().BeFalse();
             result.Errors.Should().Contain(ErrorMessages.InvalidCredentials);
-            result.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
+            result.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace AuthService.Application.UnitTests.Services
 
             result.Success.Should().BeFalse();
             result.Errors.Should().Contain(ErrorMessages.UsernameAlreadyExists);
-            result.StatusCode.Should().Be((int)HttpStatusCode.Conflict);
+            result.StatusCode.Should().Be(StatusCodes.Status409Conflict);
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace AuthService.Application.UnitTests.Services
 
             result.Success.Should().BeFalse();
             result.Errors.Should().Contain(Constants.ERROR_MESSAGE);
-            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [Fact]
@@ -160,7 +160,7 @@ namespace AuthService.Application.UnitTests.Services
 
             result.Success.Should().BeTrue();
             result.Result.Should().Be(Constants.JWT_TOKEN);
-            result.StatusCode.Should().Be((int)HttpStatusCode.Created);
+            result.StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Fact]

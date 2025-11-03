@@ -1,17 +1,19 @@
-﻿using AuthService.Domain.DTOs;
+﻿using AuthService.Application.Interfaces.Common;
 using Microsoft.AspNetCore.Http;
-using System.Net;
-using System.Text.Json;
 
 namespace AuthService.Infrastructure.Middleware
 {
     public class CustomResponseMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IResponseHandler _responseHandler;
 
-        public CustomResponseMiddleware(RequestDelegate next)
+        private const string JsonContentType = "application/json";
+
+        public CustomResponseMiddleware(RequestDelegate next, IResponseHandler responseHandler)
         {
             _next = next;
+            _responseHandler = responseHandler;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -22,49 +24,22 @@ namespace AuthService.Infrastructure.Middleware
 
             await _next(context);
 
-            if ((context.Response.StatusCode == (int)HttpStatusCode.Unauthorized || 
-                context.Response.StatusCode == (int)HttpStatusCode.Forbidden) &&
-                memoryStream.Length == 0)
-            {
-                context.Response.ContentType = "application/json";
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var body = await new StreamReader(memoryStream).ReadToEndAsync();
 
-                var result = new ResultDto<string>
-                {
-                    Success = false,
-                    Errors = new[]
-                    {
-                    context.Response.StatusCode == 401
-                        ? "Login failed or token is invalid."
-                        : "You do not have the required permissions."
-                },
-                    StatusCode = context.Response.StatusCode
-                };
+            var (handled, jsonResponse, newStatusCode) =
+                _responseHandler.HandleResponse(context.Response.StatusCode, body);
 
-                var json = JsonSerializer.Serialize(result);
-                await context.Response.WriteAsync(json);
+            context.Response.Body = originalBodyStream;
+            context.Response.ContentType = JsonContentType;
 
-                context.Response.Body.Seek(0, SeekOrigin.Begin);
-                await context.Response.Body.CopyToAsync(originalBodyStream);
-            }
+            if (newStatusCode.HasValue)
+                context.Response.StatusCode = newStatusCode.Value;
+
+            if (handled && jsonResponse != null)
+                await context.Response.WriteAsync(jsonResponse);
             else
-            {
-                memoryStream.Seek(0, SeekOrigin.Begin);
-
-                var responseBody = await new StreamReader(memoryStream).ReadToEndAsync();
-
-                var resultDto = JsonSerializer.Deserialize<ResultDto<object>>(responseBody, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-
-                if (resultDto != null)
-                {
-                    context.Response.StatusCode = resultDto.StatusCode;
-                }
-
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                await memoryStream.CopyToAsync(originalBodyStream);
-            }
+                await context.Response.WriteAsync(body);
         }
     }
 }

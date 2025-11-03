@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace AuthService.Domain.DTOs
 {
@@ -7,6 +7,6 @@ namespace AuthService.Domain.DTOs
         public bool Success { get; set; }
         public T? Result { get; set; }
         public IEnumerable<string>? Errors { get; set; }
-        public int StatusCode { get; set; } = (int)HttpStatusCode.OK;
+        public int StatusCode { get; set; } = StatusCodes.Status200OK;
     }
 }

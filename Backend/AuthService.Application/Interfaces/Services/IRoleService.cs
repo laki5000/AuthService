@@ -1,6 +1,6 @@
 ﻿using AuthService.Domain.DTOs;
 
-namespace AuthService.Application.Interfaces
+namespace AuthService.Application.Interfaces.Services
 {
     public interface IRoleService
     {

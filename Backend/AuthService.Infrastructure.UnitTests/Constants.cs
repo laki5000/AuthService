@@ -1,6 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens.Experimental;
-
-namespace AuthService.Infrastructure.UnitTests
+﻿namespace AuthService.Infrastructure.UnitTests
 {
     public static class Constants
     {
@@ -13,5 +11,7 @@ namespace AuthService.Infrastructure.UnitTests
         public const string EMAIL = "e@mail.com";
         public const string ROLE1 = "Admin";
         public const string ROLE2 = "User";
+        public const string JWT_TOKEN = "jwt-token";
+        public const string EXISTING_HEADER_VALUE = "ExistingHeader";
     }
 }

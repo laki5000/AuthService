@@ -1,5 +1,5 @@
 ﻿using AuthService.Application.Constants;
-using AuthService.Application.Interfaces;
+using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.DTOs;
 using Microsoft.AspNetCore.Identity;
 

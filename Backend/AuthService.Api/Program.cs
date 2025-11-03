@@ -1,4 +1,6 @@
-using AuthService.Application.Interfaces;
+using AuthService.Application.Common;
+using AuthService.Application.Interfaces.Common;
+using AuthService.Application.Interfaces.Services;
 using AuthService.Application.Services;
 using AuthService.Infrastructure.Middleware;
 using AuthService.Infrastructure.Persistence;
@@ -16,6 +18,7 @@ builder.Services.Configure<JwtOptions>(
 // Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddSingleton<IResponseHandler, ResponseHandler>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -31,7 +34,7 @@ builder.Services.AddCors(opt =>
     opt.AddPolicy("ng", policy =>
         policy.AllowAnyHeader()
               .AllowAnyMethod()
-              .WithOrigins("http://localhost:4200")); 
+              .WithOrigins("http://localhost:4200"));
 });
 
 // JWT Auth

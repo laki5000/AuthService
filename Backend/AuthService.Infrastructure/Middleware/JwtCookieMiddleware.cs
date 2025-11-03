@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AuthService.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace AuthService.Infrastructure.Middleware
 {
@@ -6,17 +7,17 @@ namespace AuthService.Infrastructure.Middleware
     {
         private readonly RequestDelegate _next;
 
-        public JwtCookieMiddleware(RequestDelegate next)
+        private readonly ITokenHeaderService _tokenHeaderService;
+
+        public JwtCookieMiddleware(RequestDelegate next, ITokenHeaderService tokenHeaderService)
         {
             _next = next;
+            _tokenHeaderService = tokenHeaderService;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Cookies.TryGetValue("jwt", out var token) && !context.Request.Headers.ContainsKey("Authorization"))
-            {
-                context.Request.Headers.Append("Authorization", $"Bearer {token}");
-            }
+            _tokenHeaderService.AddJwtFromCookieToHeader(context);
 
             await _next(context);
         }

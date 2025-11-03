@@ -1,7 +1,6 @@
 ﻿using AuthService.Domain.DTOs;
-using System.Data;
 
-namespace AuthService.Application.Interfaces
+namespace AuthService.Application.Interfaces.Services
 {
     public interface IUserService
     {

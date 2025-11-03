@@ -1,9 +1,9 @@
 ﻿using AuthService.Application.Constants;
-using AuthService.Application.Interfaces;
+using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.DTOs;
 using AuthService.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System.Net;
 
 namespace AuthService.Application.Services
 {
@@ -30,11 +30,11 @@ namespace AuthService.Application.Services
         {
             var user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.InvalidCredentials], StatusCode = (int)HttpStatusCode.Unauthorized };
+                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.InvalidCredentials], StatusCode = StatusCodes.Status401Unauthorized };
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: false);
             if (!result.Succeeded)
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.InvalidCredentials], StatusCode = (int)HttpStatusCode.Unauthorized };
+                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.InvalidCredentials], StatusCode = StatusCodes.Status401Unauthorized };
 
             var roles = await _userManager.GetRolesAsync(user);
 
@@ -46,7 +46,7 @@ namespace AuthService.Application.Services
         {
             var existing = await _userManager.FindByNameAsync(dto.Username);
             if (existing != null)
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.UsernameAlreadyExists], StatusCode = (int)HttpStatusCode.Conflict };
+                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.UsernameAlreadyExists], StatusCode = StatusCodes.Status409Conflict };
 
             var user = new User
             {
@@ -58,10 +58,10 @@ namespace AuthService.Application.Services
 
             var createResult = await _userManager.CreateAsync(user, dto.Password);
             if (!createResult.Succeeded)
-                return new ResultDto<string> { Success = false, Errors = createResult.Errors.Select(e => e.Description), StatusCode = (int)HttpStatusCode.BadRequest };
+                return new ResultDto<string> { Success = false, Errors = createResult.Errors.Select(e => e.Description), StatusCode = StatusCodes.Status400BadRequest };
 
             var token = _tokenService.GenerateToken(user, Enumerable.Empty<string>());
-            return new ResultDto<string> { Success = true, Result = token, StatusCode = (int)HttpStatusCode.Created };
+            return new ResultDto<string> { Success = true, Result = token, StatusCode = StatusCodes.Status201Created };
         }
 
         public async Task<ResultDto<string>> UpdateUserRole(string username, string role, bool add)
