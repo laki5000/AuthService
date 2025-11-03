@@ -12,5 +12,6 @@
         public const string NONEXISTENT_ROLE = "NonexistentRole";
         public const string JWT_TOKEN = "jwt-token";
         public const string ERROR_MESSAGE = "Error";
+        public const string NOT_VALID_JSON = "{ not valid json }";
     }
 }
