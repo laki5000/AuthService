@@ -1,6 +1,5 @@
 ﻿using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

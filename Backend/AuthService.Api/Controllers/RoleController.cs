@@ -21,7 +21,7 @@ namespace AuthService.Api.Controllers
         public async Task<IActionResult> Create([FromBody] string roleName)
         {
             var result = await _roleService.CreateAsync(roleName);
-            return Ok(result);
+            return StatusCode(StatusCodes.Status201Created, result);
         }
 
         [HttpGet]

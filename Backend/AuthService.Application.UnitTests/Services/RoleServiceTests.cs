@@ -1,4 +1,5 @@
 using AuthService.Application.Constants;
+using AuthService.Application.Exceptions;
 using AuthService.Application.Services;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
@@ -27,28 +28,26 @@ namespace AuthService.Application.UnitTests.Services
         }
 
         [Fact]
-        public async Task CreateAsync_WithEmptyRole_ShouldReturnError()
+        public async Task CreateAsync_WithEmptyRole_ShouldThrowValidationException()
         {
-            var result = await _roleService.CreateAsync(string.Empty);
-
-            result.Success.Should().BeFalse();
-            result.Errors.Should().Contain(ErrorMessages.RoleNameCannotBeEmpty);
+            await FluentActions.Invoking(() => _roleService.CreateAsync(string.Empty))
+                .Should().ThrowAsync<ValidationException>()
+                .WithMessage(ErrorMessages.RoleNameCannotBeEmpty);
         }
 
         [Fact]
-        public async Task CreateAsync_WhenRoleAlreadyExists_ShouldReturnError()
+        public async Task CreateAsync_WhenRoleAlreadyExists_ShouldThrowConflictException()
         {
             _roleManagerMock.Setup(x => x.RoleExistsAsync(Constants.TEST_ROLE1))
                 .ReturnsAsync(true);
 
-            var result = await _roleService.CreateAsync(Constants.TEST_ROLE1);
-
-            result.Success.Should().BeFalse();
-            result.Errors.Should().Contain(ErrorMessages.RoleAlreadyExists);
+            await FluentActions.Invoking(() => _roleService.CreateAsync(Constants.TEST_ROLE1))
+                .Should().ThrowAsync<ConflictException>()
+                .WithMessage(ErrorMessages.RoleAlreadyExists);
         }
 
         [Fact]
-        public async Task CreateAsync_WhenRoleCreationFails_ShouldReturnIdentityErrors()
+        public async Task CreateAsync_WhenRoleCreationFails_ShouldThrowOperationFailedException()
         {
             var identityErrors = new IdentityError[] { new IdentityError { Description = Constants.ERROR_MESSAGE } };
             _roleManagerMock.Setup(x => x.RoleExistsAsync(Constants.TEST_ROLE1))
@@ -56,10 +55,9 @@ namespace AuthService.Application.UnitTests.Services
             _roleManagerMock.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>()))
                 .ReturnsAsync(IdentityResult.Failed(identityErrors));
 
-            var result = await _roleService.CreateAsync(Constants.TEST_ROLE1);
-
-            result.Success.Should().BeFalse();
-            result.Errors.Should().Contain(Constants.ERROR_MESSAGE);
+            await FluentActions.Invoking(() => _roleService.CreateAsync(Constants.TEST_ROLE1))
+                .Should().ThrowAsync<OperationFailedException>()
+                .WithMessage(Constants.ERROR_MESSAGE);
         }
 
         [Fact]
@@ -91,7 +89,7 @@ namespace AuthService.Application.UnitTests.Services
 
             result.Success.Should().BeTrue();
             result.Result.Should().HaveCount(2);
-            result.Result.Should().Contain([Constants.TEST_ROLE1, Constants.TEST_ROLE2]);
+            result.Result.Should().Contain(new[] { Constants.TEST_ROLE1, Constants.TEST_ROLE2 });
         }
 
         [Fact]

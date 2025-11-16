@@ -1,4 +1,5 @@
 ﻿using AuthService.Application.Constants;
+using AuthService.Application.Exceptions;
 using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.DTOs;
 using AuthService.Domain.Entities;
@@ -30,23 +31,23 @@ namespace AuthService.Application.Services
         {
             var user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.InvalidCredentials], StatusCode = StatusCodes.Status401Unauthorized };
+                throw new AuthenticationException(ErrorMessages.InvalidCredentials);
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: false);
             if (!result.Succeeded)
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.InvalidCredentials], StatusCode = StatusCodes.Status401Unauthorized };
+                throw new AuthenticationException(ErrorMessages.InvalidCredentials);
 
             var roles = await _userManager.GetRolesAsync(user);
 
             var token = _tokenService.GenerateToken(user, roles);
-            return new ResultDto<string> { Success = true, Result = token };
+            return new ResultDto<string> { Result = token };
         }
 
         public async Task<ResultDto<string>> RegisterAsync(RegisterDto dto)
         {
             var existing = await _userManager.FindByNameAsync(dto.Username);
             if (existing != null)
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.UsernameAlreadyExists], StatusCode = StatusCodes.Status409Conflict };
+                throw new ConflictException(ErrorMessages.UsernameAlreadyExists);
 
             var user = new User
             {
@@ -58,27 +59,25 @@ namespace AuthService.Application.Services
 
             var createResult = await _userManager.CreateAsync(user, dto.Password);
             if (!createResult.Succeeded)
-                return new ResultDto<string> { Success = false, Errors = createResult.Errors.Select(e => e.Description), StatusCode = StatusCodes.Status400BadRequest };
+            {
+                var errorMessage = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                throw new OperationFailedException(errorMessage);
+            }
 
             var token = _tokenService.GenerateToken(user, Enumerable.Empty<string>());
-            return new ResultDto<string> { Success = true, Result = token, StatusCode = StatusCodes.Status201Created };
+            return new ResultDto<string> { Result = token, StatusCode = StatusCodes.Status201Created };
         }
 
         public async Task<ResultDto<string>> UpdateUserRole(string username, string role, bool add)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
-            {
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.UserNotFound], StatusCode = 404 };
-            }
+                throw new NotFoundException(ErrorMessages.UserNotFound);
 
             if (!await _roleManager.RoleExistsAsync(role))
-            {
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.RoleDoesNotExist(role)], StatusCode = 404 };
-            }
+                throw new NotFoundException(ErrorMessages.RoleDoesNotExist(role));
 
             IdentityResult result;
-
             if (add)
             {
                 result = await _userManager.AddToRoleAsync(user, role);
@@ -90,10 +89,11 @@ namespace AuthService.Application.Services
 
             if (!result.Succeeded)
             {
-                return new ResultDto<string> { Success = false, Errors = result.Errors.Select(e => e.Description).ToArray(), StatusCode = 400 };
+                var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new OperationFailedException(errorMessage);
             }
 
-            return new ResultDto<string> { Success = true, StatusCode = 200 };
+            return new ResultDto<string>();
         }
     }
 }

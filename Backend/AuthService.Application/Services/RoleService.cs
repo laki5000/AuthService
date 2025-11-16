@@ -1,4 +1,5 @@
 ﻿using AuthService.Application.Constants;
+using AuthService.Application.Exceptions;
 using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -17,17 +18,20 @@ namespace AuthService.Application.Services
         public async Task<ResultDto<string>> CreateAsync(string role)
         {
             if (string.IsNullOrWhiteSpace(role))
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.RoleNameCannotBeEmpty] };
+                throw new ValidationException(ErrorMessages.RoleNameCannotBeEmpty);
 
             var roleExist = await _roleManager.RoleExistsAsync(role);
             if (roleExist)
-                return new ResultDto<string> { Success = false, Errors = [ErrorMessages.RoleAlreadyExists] };
+                throw new ConflictException(ErrorMessages.RoleAlreadyExists);
 
             var result = await _roleManager.CreateAsync(new IdentityRole(role));
             if (!result.Succeeded)
-                return new ResultDto<string> { Success = false, Errors = result.Errors.Select(e => e.Description) };
-
-            return new ResultDto<string> { Success = true, Result = role };
+            {
+                var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new OperationFailedException(errorMessage);
+            }
+                
+            return new ResultDto<string> { Result = role };
         }
 
         public ResultDto<IEnumerable<string>> GetAll()
@@ -38,7 +42,6 @@ namespace AuthService.Application.Services
 
             return new ResultDto<IEnumerable<string>>
             {
-                Success = true,
                 Result = roles ?? Enumerable.Empty<string>()
             };
         }

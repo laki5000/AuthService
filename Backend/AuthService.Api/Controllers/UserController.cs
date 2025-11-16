@@ -1,7 +1,10 @@
-﻿using AuthService.Application.Interfaces.Services;
+﻿using AuthService.Application.Helpers;
+using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.DTOs;
+using AuthService.Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace AuthService.Api.Controllers
 {
@@ -9,20 +12,25 @@ namespace AuthService.Api.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IConfiguration _config;
         private readonly IUserService _userService;
 
-        public UserController(IConfiguration config, IUserService userService)
+        private readonly JwtOptions _jwtOptions;
+
+        public UserController(IUserService userService, IOptions<JwtOptions> jwtOptions)
         {
-            _config = config;
             _userService = userService;
+
+            _jwtOptions = jwtOptions.Value;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
             var result = await _userService.RegisterAsync(dto);
-            return Ok(result);
+
+            CookieHelper.SetJwtCookie(Response, result.Result!, _jwtOptions.ExpiresMinutes);
+
+            return StatusCode(StatusCodes.Status201Created, result);
         }
 
         [HttpPost("login")]
@@ -30,18 +38,7 @@ namespace AuthService.Api.Controllers
         {
             var result = await _userService.LoginAsync(dto);
 
-            if (result.Success)
-            {
-                var jwtSection = _config.GetSection("Jwt");
-
-                Response.Cookies.Append("jwt", result.Result!, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.UtcNow.AddMinutes(int.Parse(jwtSection["ExpiresMinutes"] ?? "60"))
-                });
-            }
+            CookieHelper.SetJwtCookie(Response, result.Result!, _jwtOptions.ExpiresMinutes);
 
             return Ok(result);
         }
@@ -51,15 +48,9 @@ namespace AuthService.Api.Controllers
         [ProducesResponseType(typeof(ResultDto<string>), StatusCodes.Status200OK)]
         public IActionResult Logout()
         {
-            if (Request.Cookies.ContainsKey("jwt"))
-            {
-                Response.Cookies.Delete("jwt");
-            }
+            CookieHelper.DeleteJwtCookie(Request, Response);
 
-            var result = new ResultDto<string>()
-            {
-                Success = true
-            };
+            var result = new ResultDto<string>();
             return Ok(result);
         }
 

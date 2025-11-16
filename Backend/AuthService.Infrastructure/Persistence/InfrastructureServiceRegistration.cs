@@ -26,7 +26,6 @@ namespace AuthService.Infrastructure.Persistence
             .AddSignInManager<SignInManager<User>>();
 
             services.AddScoped<ITokenService, TokenService>();
-            services.AddSingleton<ITokenHeaderService, TokenHeaderService>();
 
             return services;
         }

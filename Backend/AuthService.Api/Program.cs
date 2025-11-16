@@ -1,74 +1,30 @@
-using AuthService.Application.Common;
-using AuthService.Application.Interfaces.Common;
-using AuthService.Application.Interfaces.Services;
-using AuthService.Application.Services;
-using AuthService.Infrastructure.Middleware;
+using AuthService.Api.Extensions;
 using AuthService.Infrastructure.Persistence;
 using AuthService.Infrastructure.Security;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add configurations to the container
-builder.Services.Configure<JwtOptions>(
-    builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
-// Add services to the container.
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddSingleton<IResponseHandler, ResponseHandler>();
-
+// Services
+builder.Services.ConfigureJwt(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddControllersWithFilters();
 
-builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// CORS
-builder.Services.AddCors(opt =>
-{
-    opt.AddPolicy("ng", policy =>
-        policy.AllowAnyHeader()
-              .AllowAnyMethod()
-              .WithOrigins("http://localhost:4200"));
-});
-
-// JWT Auth
-var jwt = builder.Configuration.GetSection("Jwt");
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(o =>
-    {
-        o.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = jwt["Issuer"],
-            ValidateAudience = true,
-            ValidAudience = jwt["Audience"],
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!)),
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.FromSeconds(30)
-        };
-    });
+// Swagger
+builder.Services.AddSwagger();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUIEndpoints();
 }
 
 app.UseHttpsRedirection();
-
-// Middlewares
-app.UseMiddleware<JwtCookieMiddleware>();
-app.UseMiddleware<CustomResponseMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
