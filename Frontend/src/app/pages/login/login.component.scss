@@ -1,0 +1,17 @@
+.login-container {
+  width: 300px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .error {
+    color: red;
+    font-size: 0.8rem;
+  }
+}
