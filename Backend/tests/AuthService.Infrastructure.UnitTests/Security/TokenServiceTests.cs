@@ -1,6 +1,5 @@
 ﻿using AuthService.Domain.Entities;
 using AuthService.Infrastructure.Security;
-using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -8,22 +7,15 @@ namespace AuthService.Infrastructure.UnitTests.Security
 {
     public class TokenServiceTests
     {
-        private readonly JwtOptions _jwtOptionsMock;
-
         private readonly TokenService _tokenService;
+        private readonly JwtOptions _jwtOptionsMock;
 
         public TokenServiceTests()
         {
-            _jwtOptionsMock = new JwtOptions
-            {
-                Key = Constants.KEY,
-                Issuer = Constants.ISSUER,
-                Audience = Constants.AUDIENCE,
-                ExpiresMinutes = Constants.EXPIRES_MINUTES,
-            };
+            var module = new InfrastructureTestModule();
 
-            var optionsMock = Options.Create(_jwtOptionsMock);
-            _tokenService = new TokenService(optionsMock);
+            _tokenService = module.TokenService;
+            _jwtOptionsMock = module.JwtOptions;
         }
 
         [Fact]

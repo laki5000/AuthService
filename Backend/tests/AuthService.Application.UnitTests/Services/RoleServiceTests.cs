@@ -3,28 +3,21 @@ using AuthService.Application.Exceptions;
 using AuthService.Application.Services;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace AuthService.Application.UnitTests.Services
 {
     public class RoleServiceTests
     {
-        private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
-
         private readonly RoleService _roleService;
+        private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
 
         public RoleServiceTests()
         {
-            _roleManagerMock = new Mock<RoleManager<IdentityRole>>(
-                new Mock<IRoleStore<IdentityRole>>().Object,
-                new List<IRoleValidator<IdentityRole>> { new Mock<IRoleValidator<IdentityRole>>().Object },
-                new Mock<ILookupNormalizer>().Object,
-                new Mock<IdentityErrorDescriber>().Object,
-                new Mock<ILogger<RoleManager<IdentityRole>>>().Object
-            );
+            var module = new ApplicationTestModule();
 
-            _roleService = new RoleService(_roleManagerMock.Object);
+            _roleService = module.RoleService;
+            _roleManagerMock = module.RoleManagerMock;
         }
 
         [Fact]
@@ -89,7 +82,7 @@ namespace AuthService.Application.UnitTests.Services
 
             result.Success.Should().BeTrue();
             result.Result.Should().HaveCount(2);
-            result.Result.Should().Contain(new[] { Constants.TEST_ROLE1, Constants.TEST_ROLE2 });
+            result.Result.Should().Contain([Constants.TEST_ROLE1, Constants.TEST_ROLE2]);
         }
 
         [Fact]

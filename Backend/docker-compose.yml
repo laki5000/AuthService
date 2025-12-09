@@ -3,7 +3,7 @@ services:
     image: ${DOCKER_REGISTRY-}authserviceapi
     build:
       context: .
-      dockerfile: AuthService.Api/Dockerfile
+      dockerfile: src/AuthService.Api/Dockerfile
 
   postgres:
     image: postgres:16

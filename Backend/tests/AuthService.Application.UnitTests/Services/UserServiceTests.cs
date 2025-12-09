@@ -5,57 +5,29 @@ using AuthService.Application.Services;
 using AuthService.Domain.DTOs;
 using AuthService.Domain.Entities;
 using FluentAssertions;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 
 namespace AuthService.Application.UnitTests.Services
 {
     public class UserServiceTests
     {
+        private readonly UserService _userService;
         private readonly Mock<UserManager<User>> _userManagerMock;
         private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
         private readonly Mock<SignInManager<User>> _signInManagerMock;
         private readonly Mock<ITokenService> _tokenServiceMock;
 
-        private readonly UserService _userService;
-
         public UserServiceTests()
         {
-            _userManagerMock = new Mock<UserManager<User>>(
-                new Mock<IUserStore<User>>().Object,
-                new Mock<IOptions<IdentityOptions>>().Object,
-                new Mock<IPasswordHasher<User>>().Object,
-                new IUserValidator<User>[] { new Mock<IUserValidator<User>>().Object },
-                new IPasswordValidator<User>[] { new Mock<IPasswordValidator<User>>().Object },
-                new Mock<ILookupNormalizer>().Object,
-                new Mock<IdentityErrorDescriber>().Object,
-                new Mock<IServiceProvider>().Object,
-                new Mock<ILogger<UserManager<User>>>().Object
-            );
+            var module = new ApplicationTestModule();
 
-            _roleManagerMock = new Mock<RoleManager<IdentityRole>>(
-                new Mock<IRoleStore<IdentityRole>>().Object,
-                new List<IRoleValidator<IdentityRole>> { new Mock<IRoleValidator<IdentityRole>>().Object },
-                new Mock<ILookupNormalizer>().Object,
-                new Mock<IdentityErrorDescriber>().Object,
-                new Mock<ILogger<RoleManager<IdentityRole>>>().Object
-            );
-
-            _signInManagerMock = new Mock<SignInManager<User>>(
-                _userManagerMock.Object,
-                new Mock<IHttpContextAccessor>().Object,
-                new Mock<IUserClaimsPrincipalFactory<User>>().Object,
-                new Mock<IOptions<IdentityOptions>>().Object,
-                new Mock<ILogger<SignInManager<User>>>().Object,
-                new Mock<IAuthenticationSchemeProvider>().Object
-            );
-
-            _tokenServiceMock = new Mock<ITokenService>();
-            _userService = new UserService(_userManagerMock.Object, _roleManagerMock.Object, _signInManagerMock.Object, _tokenServiceMock.Object);
+            _userService = module.UserService;
+            _userManagerMock = module.UserManagerMock;
+            _roleManagerMock = module.RoleManagerMock;
+            _signInManagerMock = module.SignInManagerMock;
+            _tokenServiceMock = module.TokenServiceMock;
         }
 
         [Fact]
