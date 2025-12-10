@@ -6,7 +6,6 @@ namespace AuthService.Infrastructure.Persistence
 {
     // From AuthService.Api project
     // Create migration - dotnet ef migrations add InitialIdentityMigration --project ../AuthService.Infrastructure --startup-project .
-    // Update db - dotnet ef database update --project ../AuthService.Infrastructure/AuthService.Infrastructure.csproj --startup-project . --context ApplicationDbContext
     public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
         public ApplicationDbContext CreateDbContext(string[] args)

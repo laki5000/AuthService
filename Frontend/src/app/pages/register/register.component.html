@@ -1,0 +1,41 @@
+<div class="form-container">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      Username
+      <input type="text" formControlName="username" />
+    </label>
+
+    <label>
+      Email
+      <input type="email" formControlName="email" />
+    </label>
+
+    <label>
+      Email again
+      <input type="email" formControlName="emailAgain" />
+    </label>
+
+    <label>
+      Password
+      <input type="password" formControlName="password" />
+    </label>
+
+    <label>
+      Password again
+      <input type="password" formControlName="passwordAgain" />
+    </label>
+
+    <label>
+      First Name
+      <input type="text" formControlName="firstName" />
+    </label>
+
+    <label>
+      Last Name
+      <input type="text" formControlName="lastName" />
+    </label>
+
+    <button [disabled]="form.invalid" type="submit">Register</button>
+    <button routerLink="/login" type="button">Login</button>
+  </form>
+</div>

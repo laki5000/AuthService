@@ -1,27 +1,16 @@
-<div class="login-container">
+<div class="form-container">
   <form [formGroup]="form" (ngSubmit)="submit()">
-
-    @if(form.controls.username.touched && form.controls.username.invalid) {
-      <div class="error">
-        Username is required.
-      </div>
-    }
     <label>
       Username
       <input type="text" formControlName="username" />
     </label>
 
-    @if(form.controls.password.touched && form.controls.password.invalid) {
-      <div class="error">
-        Password is required.
-      </div>
-    }
     <label>
       Password
       <input type="password" formControlName="password" />
     </label>
 
     <button [disabled]="form.invalid" type="submit">Login</button>
-
+    <button routerLink="/register" type="button">Register</button>
   </form>
 </div>
