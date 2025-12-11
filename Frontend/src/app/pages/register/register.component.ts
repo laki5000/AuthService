@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { RegisterDto } from '../../core/models/register.dto';
-import { ResultDto } from '../../core/models/result.dto';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { BaseFormComponent } from '../../shared/base-form.component';
 
 @Component({
   selector: 'app-register',
@@ -13,19 +13,15 @@ import { CommonModule } from '@angular/common';
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export class Register implements OnInit {
-  form!: FormGroup;
-
+export class Register extends BaseFormComponent {
   constructor(
-    private fb: FormBuilder,
+    fb: FormBuilder,
     private authService: AuthService,
-  ) {}
-
-  ngOnInit(): void {
-    this.initForm();
+  ) {
+    super(fb);
   }
 
-  private initForm(): void {
+  protected initForm(): void {
     this.form = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -37,11 +33,8 @@ export class Register implements OnInit {
     });
   }
 
-  submit(): void {
-    const dto: RegisterDto = this.form.value as RegisterDto;
-
-    this.authService.register(dto).subscribe({
-      next: (response: ResultDto<string>) => {},
-    });
+  protected submit(): void {
+    const dto = this.form.value as RegisterDto;
+    this.authService.register(dto).subscribe();
   }
 }
