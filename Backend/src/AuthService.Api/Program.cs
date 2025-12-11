@@ -38,10 +38,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerUIEndpoints();
 }
-else
-{
-    app.UseHttpsRedirection();
-}
+
+app.UseHttpsRedirection();
 
 app.UseCors(CommonConstants.CorsPolicyName);
 

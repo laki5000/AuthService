@@ -54,6 +54,15 @@ namespace AuthService.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("checkAuth")]
+        [Authorize]
+        [ProducesResponseType(typeof(ResultDto<string>), StatusCodes.Status200OK)]
+        public IActionResult CheckAuth()
+        {
+            var result = new ResultDto<string>();
+            return Ok(result);
+        }
+
         [HttpPost("updateUserRole/{username}")]
         [Authorize]
         public async Task<IActionResult> UpdateUserRole(string username, [FromQuery] string role, [FromQuery] bool add = true)

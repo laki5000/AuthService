@@ -4,7 +4,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { RegisterDto } from '../../core/models/register.dto';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { BaseFormComponent } from '../../shared/base-form.component';
+import { BaseFormComponent } from '../../shared/components/base/base-form.component';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +13,7 @@ import { BaseFormComponent } from '../../shared/base-form.component';
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export class Register extends BaseFormComponent {
+export class RegisterComponent extends BaseFormComponent {
   constructor(
     fb: FormBuilder,
     private authService: AuthService,

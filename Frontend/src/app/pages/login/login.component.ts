@@ -8,7 +8,7 @@ import {
 import { LoginDto } from '../../core/models/login.dto';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterModule } from '@angular/router';
-import { BaseFormComponent } from '../../shared/base-form.component';
+import { BaseFormComponent } from '../../shared/components/base/base-form.component';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ import { BaseFormComponent } from '../../shared/base-form.component';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class Login extends BaseFormComponent {
+export class LoginComponent extends BaseFormComponent {
   constructor(
     fb: FormBuilder,
     private authService: AuthService,

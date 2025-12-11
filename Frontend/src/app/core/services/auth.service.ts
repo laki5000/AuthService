@@ -9,7 +9,7 @@ import { RegisterDto } from '../models/register.dto';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:8080/api/User';
+  private readonly baseUrl = 'https://localhost:8081/api/User';
 
   constructor(private restService: RestService) {}
 
@@ -19,5 +19,13 @@ export class AuthService {
 
   register(request: RegisterDto): Observable<ResultDto<string>> {
     return this.restService.post<ResultDto<string>>(`${this.baseUrl}/register`, request);
+  }
+
+  logout(): Observable<ResultDto<string>> {
+    return this.restService.post<ResultDto<string>>(`${this.baseUrl}/logout`, null);
+  }
+
+  checkAuth(): Observable<ResultDto<string>> {
+    return this.restService.get<ResultDto<string>>(`${this.baseUrl}/checkAuth`);
   }
 }

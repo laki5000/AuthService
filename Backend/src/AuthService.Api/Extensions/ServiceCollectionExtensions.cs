@@ -1,7 +1,6 @@
 ﻿using AuthService.Api.Filters;
 using AuthService.Application.Interfaces.Services;
 using AuthService.Application.Services;
-using AuthService.Infrastructure.Security;
 
 namespace AuthService.Api.Extensions
 {

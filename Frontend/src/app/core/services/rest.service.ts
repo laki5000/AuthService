@@ -14,4 +14,11 @@ export class RestService {
       withCredentials: true
     });
   }
+
+  public get<T>(url: string, options?: { headers?: HttpHeaders }): Observable<T> {
+    return this.http.get<T>(url, {
+      ...options,
+      withCredentials: true
+    });
+  }
 }

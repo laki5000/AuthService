@@ -10,7 +10,7 @@ namespace AuthService.Application.Helpers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false,
+                Secure = true,
                 SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddMinutes(expiresMinutes)
             };
