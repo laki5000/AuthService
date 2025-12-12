@@ -8,6 +8,6 @@ export const routes: Routes = [
   ...REGISTER_ROUTES,
   ...DASHBOARD_ROUTES,
 
-  /*{ path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }*/
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
