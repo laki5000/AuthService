@@ -1,8 +1,12 @@
 @if (loading$ | async) {
-  <app-navbar></app-navbar>
-  <router-outlet></router-outlet>
-} @else {
   <div class="loading-overlay">
     <div class="spinner">Loading...</div>
+  </div>
+} @else {
+  <div>
+    <app-navbar></app-navbar>
+    @defer {
+      <router-outlet></router-outlet>
+    }
   </div>
 }
