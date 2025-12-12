@@ -1,10 +1,11 @@
-import { Component, } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { RegisterDto } from '../../core/models/register.dto';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BaseFormComponent } from '../../shared/components/base/base-form.component';
+import { RouteConstants } from '../../core/constants/route.constant';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,8 @@ import { BaseFormComponent } from '../../shared/components/base/base-form.compon
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent extends BaseFormComponent {
+  routes = RouteConstants;
+
   constructor(
     fb: FormBuilder,
     private authService: AuthService,

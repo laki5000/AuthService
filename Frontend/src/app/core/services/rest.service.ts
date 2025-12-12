@@ -11,14 +11,14 @@ export class RestService {
   public post<T>(url: string, body: any, options?: { headers?: HttpHeaders }): Observable<T> {
     return this.http.post<T>(url, body, {
       ...options,
-      withCredentials: true
+      withCredentials: true,
     });
   }
 
   public get<T>(url: string, options?: { headers?: HttpHeaders }): Observable<T> {
     return this.http.get<T>(url, {
       ...options,
-      withCredentials: true
+      withCredentials: true,
     });
   }
 }

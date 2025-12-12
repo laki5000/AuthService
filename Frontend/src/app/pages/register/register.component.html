@@ -36,6 +36,6 @@
     </label>
 
     <button [disabled]="form.invalid" type="submit">Register</button>
-    <button routerLink="/login" type="button">Login</button>
+    <button [routerLink]="routes.LoginPath" type="button">Login</button>
   </form>
 </div>

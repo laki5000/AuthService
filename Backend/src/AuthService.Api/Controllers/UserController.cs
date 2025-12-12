@@ -56,10 +56,10 @@ namespace AuthService.Api.Controllers
 
         [HttpGet("checkAuth")]
         [Authorize]
-        [ProducesResponseType(typeof(ResultDto<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResultDto<bool>), StatusCodes.Status200OK)]
         public IActionResult CheckAuth()
         {
-            var result = new ResultDto<string>();
+            var result = new ResultDto<bool> { Result = true };
             return Ok(result);
         }
 

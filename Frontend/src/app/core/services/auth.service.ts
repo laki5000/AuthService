@@ -25,7 +25,7 @@ export class AuthService {
     return this.restService.post<ResultDto<string>>(`${this.baseUrl}/logout`, null);
   }
 
-  checkAuth(): Observable<ResultDto<string>> {
-    return this.restService.get<ResultDto<string>>(`${this.baseUrl}/checkAuth`);
+  checkAuth(): Observable<ResultDto<boolean>> {
+    return this.restService.get<ResultDto<boolean>>(`${this.baseUrl}/checkAuth`);
   }
 }

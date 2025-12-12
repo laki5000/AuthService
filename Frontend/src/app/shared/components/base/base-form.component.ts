@@ -1,8 +1,8 @@
-import { Directive, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { Directive, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Directive({
-  standalone: true
+  standalone: true,
 })
 export abstract class BaseFormComponent implements OnInit {
   form!: FormGroup;
