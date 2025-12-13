@@ -21,7 +21,7 @@ export class UserService {
     return this.restService
       .post<ResultDto<string>>(`${UserApiUrlConstant.login}`, request)
       .pipe(
-        tap((result: ResultDto<string>) => this.loggedInSubject.next(result.result ? true : false)),
+        tap((result: ResultDto<string>) => this.loggedInSubject.next(result.Result ? true : false)),
       );
   }
 
@@ -29,7 +29,7 @@ export class UserService {
     return this.restService
       .post<ResultDto<string>>(`${UserApiUrlConstant.register}`, request)
       .pipe(
-        tap((result: ResultDto<string>) => this.loggedInSubject.next(result.result ? true : false)),
+        tap((result: ResultDto<string>) => this.loggedInSubject.next(result.Result ? true : false)),
       );
   }
 
@@ -38,7 +38,7 @@ export class UserService {
       .post<ResultDto<boolean>>(`${UserApiUrlConstant.logout}`, null)
       .pipe(
         tap((result: ResultDto<boolean>) =>
-          this.loggedInSubject.next(result.result ? false : true),
+          this.loggedInSubject.next(result.Result ? false : true),
         ),
       );
   }
@@ -46,7 +46,7 @@ export class UserService {
   checkAuth(): Observable<ResultDto<boolean>> {
     return this.restService.get<ResultDto<boolean>>(`${UserApiUrlConstant.checkAuth}`).pipe(
       tap((result: ResultDto<boolean>) => {
-        this.loggedInSubject.next(result.result ?? false);
+        this.loggedInSubject.next(result.Result ?? false);
       }),
     );
   }

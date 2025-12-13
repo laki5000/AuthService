@@ -18,6 +18,9 @@ namespace AuthService.Api.Extensions
             services.AddControllers(options =>
             {
                 options.Filters.Add<GlobalExceptionFilter>();
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
             return services;
         }

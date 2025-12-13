@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
 
     return this.userService.checkAuth().pipe(
       map((result: ResultDto<boolean>) => {
-        if (result.result) return true;
+        if (result.Result) return true;
 
         this.router.navigate([RouteConstants.LOGIN_PATH]);
         return false;

@@ -35,6 +35,8 @@ export class LoginComponent extends BaseFormComponent {
 
   protected submit(): void {
     const dto = this.form.value as LoginDto;
+    console.log(this.form.value)
+    console.log(dto)
     this.userService.login(dto).subscribe({
       next: () => {
         this.router.navigate([RouteConstants.DASHBOARD_PATH]);

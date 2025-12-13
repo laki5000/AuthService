@@ -1,9 +1,9 @@
 export const FormFieldConstants = {
-  USERNAME: 'username',
-  EMAIL: 'email',
-  EMAIL_AGAIN: 'emailAgain',
-  PASSWORD: 'password',
-  PASSWORD_AGAIN: 'passwordAgain',
-  FIRST_NAME: 'firstName',
-  LAST_NAME: 'lastName',
+  USERNAME: 'Username',
+  EMAIL: 'Email',
+  EMAIL_AGAIN: 'EmailAgain',
+  PASSWORD: 'Password',
+  PASSWORD_AGAIN: 'PasswordAgain',
+  FIRST_NAME: 'FirstName',
+  LAST_NAME: 'LastName',
 };

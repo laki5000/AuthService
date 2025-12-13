@@ -1,6 +1,6 @@
 export interface ResultDto<T> {
-  success: boolean;
-  result?: T;
-  error?: string;
-  statusCode: number;
+  Success: boolean;
+  Result?: T;
+  Error?: string;
+  StatusCode: number;
 }
