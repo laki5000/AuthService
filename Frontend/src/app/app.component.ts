@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { LoadingService } from './core/services/loading.service';
 import { Observable } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { LoadingOverlayComponent } from './shared/components/loading-overlay/loading-overlay.component';
+import { UserService } from './core/services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,14 @@ import { LoadingOverlayComponent } from './shared/components/loading-overlay/loa
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class App {
+export class App implements OnInit {
   loading$: Observable<boolean>;
 
-  constructor(private loadingService: LoadingService) {
+  constructor(private loadingService: LoadingService, private userService: UserService) {
     this.loading$ = loadingService.loading$;
+  }
+
+  ngOnInit(): void {
+    this.userService.monitorLoginStatus();
   }
 }

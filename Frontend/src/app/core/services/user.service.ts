@@ -5,6 +5,8 @@ import { RestService } from './rest.service';
 import { ResultDto } from '../models/result.dto';
 import { RegisterDto } from '../models/register.dto';
 import { UserApiUrlConstant } from '../constants/user-api-url.constant';
+import { Router } from '@angular/router';
+import { RouteConstants } from '../constants/route.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +15,7 @@ export class UserService {
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   loggedIn$ = this.loggedInSubject.asObservable();
 
-  constructor(private restService: RestService) {}
+  constructor(private restService: RestService, private router: Router) {}
 
   login(request: LoginDto): Observable<ResultDto<string>> {
     return this.restService
@@ -55,5 +57,13 @@ export class UserService {
 
   setLoggedIn(value: boolean): void {
     this.loggedInSubject.next(value);
+  }
+
+  monitorLoginStatus(): void {
+    this.loggedIn$.subscribe((loggedIn: boolean) => {
+      if (!loggedIn) {
+        this.router.navigate([RouteConstants.LOGIN_PATH]);
+      }
+    });
   }
 }
