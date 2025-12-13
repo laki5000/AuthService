@@ -65,7 +65,7 @@
       <input matInput type="text" formControlName="{{ formFields.LAST_NAME }}" />
     </mat-form-field>
 
-      <button mat-raised-button [disabled]="form.invalid" type="submit">Register</button>
-      <button mat-button [routerLink]="routes.LOGIN_PATH" type="button">Login</button>
+    <button mat-flat-button [disabled]="form.invalid" type="submit">Register</button>
+    <button mat-button [routerLink]="routes.LOGIN_PATH" type="button">Login</button>
   </form>
 </div>
