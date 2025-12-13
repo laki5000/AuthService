@@ -4,7 +4,7 @@ import { RouteConstants } from '../../core/constants/route.constant';
 
 export const REGISTER_ROUTES: Routes = [
   {
-    path: RouteConstants.Register,
+    path: RouteConstants.REGISTER,
     component: RegisterComponent,
   },
 ];

@@ -25,7 +25,7 @@ export class NavbarComponent {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        this.router.navigate([RouteConstants.LoginPath]);
+        this.router.navigate([RouteConstants.LOGIN_PATH]);
       }
     });
   }

@@ -17,9 +17,9 @@ export const globalErrorInterceptor: HttpInterceptorFn = (
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
-        case HttpStatus.Unauthorized:
+        case HttpStatus.UNAUTHORIZED:
           authService.setLoggedIn(false);
-          router.navigate([RouteConstants.LoginPath]);
+          router.navigate([RouteConstants.LOGIN_PATH]);
           break;
         default:
           break;

@@ -8,12 +8,13 @@ import { BaseFormComponent } from '../../shared/components/base/base-form.compon
 import { RouteConstants } from '../../core/constants/route.constant';
 import { matchFieldsValidator } from '../../shared/validators/match-fields.validator';
 import { FormFieldConstants } from '../../core/constants/form-field.constant';
-import { FormErrorConstants } from '../../core/constants/form-error.constant';
+import { FormGroupErrorKeyConstants } from '../../core/constants/form-error-key.constant';
+import { ValidationErrorDisplayComponent } from "../../shared/components/validation-error-display/validation-error-display.component";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, ValidationErrorDisplayComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
@@ -29,18 +30,27 @@ export class RegisterComponent extends BaseFormComponent {
 
   protected initForm(): void {
     this.form = this.fb.group({
-      username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      emailAgain: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      passwordAgain: ['', Validators.required],
-      firstName: [null],
-      lastName: [null],
+      [this.formFields.USERNAME]: ['', Validators.required],
+      [this.formFields.EMAIL]: ['', [Validators.required, Validators.email]],
+      [this.formFields.EMAIL_AGAIN]: ['', [Validators.required, Validators.email]],
+      [this.formFields.PASSWORD]: ['', Validators.required],
+      [this.formFields.PASSWORD_AGAIN]: ['', Validators.required],
+      [this.formFields.FIRST_NAME]: [null],
+      [this.formFields.LAST_NAME]: [null],
     },
     {
       validators: [
-        matchFieldsValidator(FormFieldConstants.EMAIL, FormFieldConstants.EMAIL_AGAIN, FormErrorConstants.EMAIL_MISMATCH),
-        matchFieldsValidator(FormFieldConstants.PASSWORD, FormFieldConstants.PASSWORD_AGAIN, FormErrorConstants.PASSWORD_MISMATCH)
+        matchFieldsValidator(
+          FormFieldConstants.EMAIL, 
+          FormFieldConstants.EMAIL_AGAIN, 
+          FormGroupErrorKeyConstants.EMAILMISMATCH, 
+          FormFieldConstants.EMAIL_AGAIN),
+        matchFieldsValidator(
+          FormFieldConstants.PASSWORD, 
+          FormFieldConstants.PASSWORD_AGAIN, 
+          FormGroupErrorKeyConstants.PASSWORDMISMATCH, 
+          FormFieldConstants.PASSWORD_AGAIN
+        )
       ]
     });
   }

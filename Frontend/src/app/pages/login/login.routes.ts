@@ -4,7 +4,7 @@ import { RouteConstants } from '../../core/constants/route.constant';
 
 export const LOGIN_ROUTES: Routes = [
   {
-    path: RouteConstants.Login,
+    path: RouteConstants.LOGIN,
     component: LoginComponent,
   },
 ];

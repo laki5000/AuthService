@@ -1,3 +1,3 @@
 export const CommonConstants = {
-  JwtCookieName: 'Jwt',
+  JWT_COOKIE_NAME: 'Jwt',
 };

@@ -5,7 +5,7 @@ import { RouteConstants } from '../../core/constants/route.constant';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
-    path: RouteConstants.Dashboard,
+    path: RouteConstants.DASHBOARD,
     component: DashboardComponent,
     canActivate: [AuthGuard],
   },

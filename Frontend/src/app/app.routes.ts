@@ -9,6 +9,6 @@ export const routes: Routes = [
   ...REGISTER_ROUTES,
   ...DASHBOARD_ROUTES,
 
-  { path: '', redirectTo: RouteConstants.DashboardPath, pathMatch: 'full' },
-  { path: '**', redirectTo: RouteConstants.DashboardPath, pathMatch: 'full' },
+  { path: '', redirectTo: RouteConstants.DASHBOARD_PATH, pathMatch: 'full' },
+  { path: '**', redirectTo: RouteConstants.DASHBOARD_PATH, pathMatch: 'full' },
 ];

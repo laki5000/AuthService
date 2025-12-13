@@ -1,15 +1,15 @@
 export const RouteConstants = {
-  Login: 'login',
-  Register: 'register',
-  Dashboard: 'dashboard',
+  LOGIN: 'login',
+  REGISTER: 'register',
+  DASHBOARD: 'dashboard',
 
-  get LoginPath() {
-    return `/${this.Login}`;
+  get LOGIN_PATH() {
+    return `/${this.LOGIN}`;
   },
-  get RegisterPath() {
-    return `/${this.Register}`;
+  get REGISTER_PATH() {
+    return `/${this.REGISTER}`;
   },
-  get DashboardPath() {
-    return `/${this.Dashboard}`;
+  get DASHBOARD_PATH() {
+    return `/${this.DASHBOARD}`;
   },
 };

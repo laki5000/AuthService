@@ -1,41 +1,61 @@
 <div class="form-container">
   <form [formGroup]="form" (ngSubmit)="submit()">
     <label>
+      <app-validation-error-display
+        [control]="form.get(formFields.USERNAME)"
+        [fieldName]="formFields.USERNAME">
+      </app-validation-error-display>
       Username
-      <input type="text" formControlName="username" />
+      <input type="text" formControlName="{{ formFields.USERNAME }}" />
     </label>
 
     <label>
+      <app-validation-error-display
+        [control]="form.get(formFields.EMAIL)"
+        [fieldName]="formFields.EMAIL">
+      </app-validation-error-display>
       Email
-      <input type="email" formControlName="email" />
+      <input type="email" formControlName="{{ formFields.EMAIL }}" />
     </label>
 
     <label>
+      <app-validation-error-display
+        [control]="form.get(formFields.EMAIL_AGAIN)"
+        [fieldName]="formFields.EMAIL_AGAIN">
+      </app-validation-error-display>
       Email again
-      <input type="email" formControlName="emailAgain" />
+      <input type="email" formControlName="{{ formFields.EMAIL_AGAIN }}" />
     </label>
 
     <label>
+      <app-validation-error-display
+        [control]="form.get(formFields.PASSWORD)"
+        [fieldName]="formFields.PASSWORD">
+      </app-validation-error-display>
       Password
-      <input type="password" formControlName="password" />
+      <input type="password" formControlName="{{ formFields.PASSWORD }}" />
     </label>
 
     <label>
+      <app-validation-error-display
+        [control]="form.get(formFields.PASSWORD_AGAIN)"
+        [fieldName]="formFields.PASSWORD_AGAIN">
+      </app-validation-error-display>
       Password again
-      <input type="password" formControlName="passwordAgain" />
+      <input type="password" formControlName="{{ formFields.PASSWORD_AGAIN }}" />
     </label>
 
     <label>
       First Name
-      <input type="text" formControlName="firstName" />
+      <input type="text" formControlName="{{ formFields.FIRST_NAME }}" />
     </label>
 
     <label>
       Last Name
-      <input type="text" formControlName="lastName" />
+      <input type="text" formControlName="{{ formFields.LAST_NAME }}" />
     </label>
 
     <button [disabled]="form.invalid" type="submit">Register</button>
-    <button [routerLink]="routes.LoginPath" type="button">Login</button>
+    <button [routerLink]="routes.LOGIN_PATH" type="button">Login</button>
   </form>
 </div>

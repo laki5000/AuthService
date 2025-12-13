@@ -1,16 +1,25 @@
 <div class="form-container">
   <form [formGroup]="form" (ngSubmit)="submit()">
     <label>
+      <app-validation-error-display
+        [control]="form.get(formFields.USERNAME)"
+        [fieldName]="formFields.USERNAME">
+      </app-validation-error-display>
       Username
-      <input type="text" formControlName="username" />
+      <input type="text" formControlName="{{ formFields.USERNAME }}" />
     </label>
 
+    
     <label>
+      <app-validation-error-display
+        [control]="form.get(formFields.PASSWORD)"
+        [fieldName]="formFields.PASSWORD">
+      </app-validation-error-display>
       Password
-      <input type="password" formControlName="password" />
+      <input type="password" formControlName="{{ formFields.PASSWORD }}" />
     </label>
 
     <button [disabled]="form.invalid" type="submit">Login</button>
-    <button [routerLink]="routes.RegisterPath" type="button">Register</button>
+    <button [routerLink]="routes.REGISTER_PATH" type="button">Register</button>
   </form>
 </div>
