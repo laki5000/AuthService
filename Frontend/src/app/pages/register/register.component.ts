@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BaseFormComponent } from '../../shared/components/base/base-form.component';
 import { RouteConstants } from '../../core/constants/route.constant';
+import { matchFieldsValidator } from '../../shared/validators/match-fields.validator';
+import { FormFieldConstants } from '../../core/constants/form-field.constant';
+import { FormErrorConstants } from '../../core/constants/form-error.constant';
 
 @Component({
   selector: 'app-register',
@@ -33,6 +36,12 @@ export class RegisterComponent extends BaseFormComponent {
       passwordAgain: ['', Validators.required],
       firstName: [null],
       lastName: [null],
+    },
+    {
+      validators: [
+        matchFieldsValidator(FormFieldConstants.EMAIL, FormFieldConstants.EMAIL_AGAIN, FormErrorConstants.EMAIL_MISMATCH),
+        matchFieldsValidator(FormFieldConstants.PASSWORD, FormFieldConstants.PASSWORD_AGAIN, FormErrorConstants.PASSWORD_MISMATCH)
+      ]
     });
   }
 
