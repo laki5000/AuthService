@@ -19,7 +19,6 @@ export class ValidationErrorDisplayComponent {
 
     const errors = this.control.errors;
     if (errors && Object.keys(errors).length > 0) {
-      console.log(this.control.errors);
       for (const key of Object.keys(errors)) {
         const typedKey = key.toUpperCase() as keyof typeof FormErrorConstants;
         if (FormErrorConstants[typedKey]) return FormErrorConstants[typedKey];
