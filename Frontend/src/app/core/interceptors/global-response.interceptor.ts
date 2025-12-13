@@ -4,7 +4,7 @@ import {
   HttpHandlerFn,
   HttpInterceptorFn,
   HttpResponse,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { inject } from '@angular/core';
@@ -14,9 +14,8 @@ import { ApiMessageConstants } from '../constants/api-message.constant';
 
 export const globalResponseInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn
+  next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
-
   const snackBar = inject(MatSnackBar);
 
   return next(req).pipe(
@@ -29,8 +28,10 @@ export const globalResponseInterceptor: HttpInterceptorFn = (
       error: (error: HttpErrorResponse) => {
         const errorBody = error.error as ResultDto<string>;
         const message = errorBody?.Error || ApiMessageConstants.DEFAULT_ERROR;
-        snackBar.open(`${ApiMessageConstants.FAILED}: ${message}`, ApiMessageConstants.DONE, { duration: 3000 });
-      }
-    })
+        snackBar.open(`${ApiMessageConstants.FAILED}: ${message}`, ApiMessageConstants.DONE, {
+          duration: 3000,
+        });
+      },
+    }),
   );
 };

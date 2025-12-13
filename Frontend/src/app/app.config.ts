@@ -12,10 +12,9 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withInterceptors([
-      globalErrorInterceptor, 
-      loadingInterceptor, 
-      globalResponseInterceptor
-    ]), withFetch()),
+    provideHttpClient(
+      withInterceptors([globalErrorInterceptor, loadingInterceptor, globalResponseInterceptor]),
+      withFetch(),
+    ),
   ],
 };

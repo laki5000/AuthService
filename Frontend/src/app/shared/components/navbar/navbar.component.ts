@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { RouteConstants } from '../../../core/constants/route.constant';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, MatButtonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })

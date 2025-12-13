@@ -1,66 +1,75 @@
 <div class="form-container">
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <label>
-      <app-validation-error-display
-        [control]="form.get(formFields.USERNAME)"
-        [fieldName]="formFields.USERNAME"
-      >
-      </app-validation-error-display>
-      Username
-      <input type="text" formControlName="{{ formFields.USERNAME }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput type="text" formControlName="{{ formFields.USERNAME }}" />
+      <mat-error>
+        <app-validation-error-display
+          [control]="form.get(formFields.USERNAME)"
+          [fieldName]="formFields.USERNAME"
+        ></app-validation-error-display>
+      </mat-error>
+    </mat-form-field>
 
-    <label>
-      <app-validation-error-display
-        [control]="form.get(formFields.EMAIL)"
-        [fieldName]="formFields.EMAIL"
-      >
-      </app-validation-error-display>
-      Email
-      <input type="email" formControlName="{{ formFields.EMAIL }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="{{ formFields.EMAIL }}" />
+      <mat-error>
+        <app-validation-error-display
+          [control]="form.get(formFields.EMAIL)"
+          [fieldName]="formFields.EMAIL"
+        ></app-validation-error-display>
+      </mat-error>
+    </mat-form-field>
 
-    <label>
-      <app-validation-error-display
-        [control]="form.get(formFields.EMAIL_AGAIN)"
-        [fieldName]="formFields.EMAIL_AGAIN"
-      >
-      </app-validation-error-display>
-      Email again
-      <input type="email" formControlName="{{ formFields.EMAIL_AGAIN }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>Email again</mat-label>
+      <input matInput type="email" formControlName="{{ formFields.EMAIL_AGAIN }}" />
+      <mat-error>
+        <app-validation-error-display
+          [control]="form.get(formFields.EMAIL_AGAIN)"
+          [fieldName]="formFields.EMAIL_AGAIN"
+        ></app-validation-error-display>
+      </mat-error>
+    </mat-form-field>
 
-    <label>
-      <app-validation-error-display
-        [control]="form.get(formFields.PASSWORD)"
-        [fieldName]="formFields.PASSWORD"
-      >
-      </app-validation-error-display>
-      Password
-      <input type="password" formControlName="{{ formFields.PASSWORD }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="{{ formFields.PASSWORD }}" />
+      <mat-error>
+        <app-validation-error-display
+          [control]="form.get(formFields.PASSWORD)"
+          [fieldName]="formFields.PASSWORD"
+        ></app-validation-error-display>
+      </mat-error>
+    </mat-form-field>
 
-    <label>
-      <app-validation-error-display
-        [control]="form.get(formFields.PASSWORD_AGAIN)"
-        [fieldName]="formFields.PASSWORD_AGAIN"
-      >
-      </app-validation-error-display>
-      Password again
-      <input type="password" formControlName="{{ formFields.PASSWORD_AGAIN }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>Password again</mat-label>
+      <input matInput type="password" formControlName="{{ formFields.PASSWORD_AGAIN }}" />
+      <mat-error>
+        <app-validation-error-display
+          [control]="form.get(formFields.PASSWORD_AGAIN)"
+          [fieldName]="formFields.PASSWORD_AGAIN"
+        ></app-validation-error-display>
+      </mat-error>
+    </mat-form-field>
 
-    <label>
-      First Name
-      <input type="text" formControlName="{{ formFields.FIRST_NAME }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" formControlName="{{ formFields.FIRST_NAME }}" />
+    </mat-form-field>
 
-    <label>
-      Last Name
-      <input type="text" formControlName="{{ formFields.LAST_NAME }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text" formControlName="{{ formFields.LAST_NAME }}" />
+    </mat-form-field>
 
-    <button [disabled]="form.invalid" type="submit">Register</button>
-    <button [routerLink]="routes.LOGIN_PATH" type="button">Login</button>
+    <div class="form-buttons">
+      <button mat-raised-button color="primary" [disabled]="form.invalid" type="submit">
+        Register
+      </button>
+      <button mat-button [routerLink]="routes.LOGIN_PATH" type="button">Login</button>
+    </div>
   </form>
 </div>

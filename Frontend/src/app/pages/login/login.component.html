@@ -1,26 +1,28 @@
 <div class="form-container">
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <label>
-      <app-validation-error-display
-        [control]="form.get(formFields.USERNAME)"
-        [fieldName]="formFields.USERNAME"
-      >
-      </app-validation-error-display>
-      Username
-      <input type="text" formControlName="{{ formFields.USERNAME }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput type="text" formControlName="{{ formFields.USERNAME }}" />
+      <mat-error>
+        <app-validation-error-display
+          [control]="form.get(formFields.USERNAME)"
+          [fieldName]="formFields.USERNAME"
+        ></app-validation-error-display>
+      </mat-error>
+    </mat-form-field>
 
-    <label>
-      <app-validation-error-display
-        [control]="form.get(formFields.PASSWORD)"
-        [fieldName]="formFields.PASSWORD"
-      >
-      </app-validation-error-display>
-      Password
-      <input type="password" formControlName="{{ formFields.PASSWORD }}" />
-    </label>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="{{ formFields.PASSWORD }}" />
+      <mat-error>
+        <app-validation-error-display
+          [control]="form.get(formFields.PASSWORD)"
+          [fieldName]="formFields.PASSWORD"
+        ></app-validation-error-display>
+      </mat-error>
+    </mat-form-field>
 
-    <button [disabled]="form.invalid" type="submit">Login</button>
-    <button [routerLink]="routes.REGISTER_PATH" type="button">Register</button>
+    <button mat-raised-button [disabled]="form.invalid" type="submit">Login</button>
+    <button mat-button [routerLink]="routes.REGISTER_PATH" type="button">Register</button>
   </form>
 </div>

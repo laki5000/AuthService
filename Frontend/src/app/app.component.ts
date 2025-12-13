@@ -16,7 +16,10 @@ import { UserService } from './core/services/user.service';
 export class App implements OnInit {
   loading$: Observable<boolean>;
 
-  constructor(private loadingService: LoadingService, private userService: UserService) {
+  constructor(
+    private loadingService: LoadingService,
+    private userService: UserService,
+  ) {
     this.loading$ = loadingService.loading$;
   }
 
