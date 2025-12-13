@@ -5,5 +5,5 @@ export const FormFieldConstants = {
   PASSWORD: 'password',
   PASSWORD_AGAIN: 'passwordAgain',
   FIRST_NAME: 'firstName',
-  LAST_NAME: 'lastName'
+  LAST_NAME: 'lastName',
 };

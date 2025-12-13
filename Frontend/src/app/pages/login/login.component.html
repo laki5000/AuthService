@@ -3,17 +3,18 @@
     <label>
       <app-validation-error-display
         [control]="form.get(formFields.USERNAME)"
-        [fieldName]="formFields.USERNAME">
+        [fieldName]="formFields.USERNAME"
+      >
       </app-validation-error-display>
       Username
       <input type="text" formControlName="{{ formFields.USERNAME }}" />
     </label>
 
-    
     <label>
       <app-validation-error-display
         [control]="form.get(formFields.PASSWORD)"
-        [fieldName]="formFields.PASSWORD">
+        [fieldName]="formFields.PASSWORD"
+      >
       </app-validation-error-display>
       Password
       <input type="password" formControlName="{{ formFields.PASSWORD }}" />

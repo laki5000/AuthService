@@ -1,9 +1,15 @@
-import { HttpEvent, HttpRequest, HttpInterceptorFn, HttpHandlerFn, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpRequest,
+  HttpInterceptorFn,
+  HttpHandlerFn,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { HttpStatus } from '../constants/http-status.constant';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { RouteConstants } from '../constants/route.constant';
 
@@ -11,14 +17,14 @@ export const globalErrorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
-  const authService = inject(AuthService);
+  const userService = inject(UserService);
   const router = inject(Router);
-  
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case HttpStatus.UNAUTHORIZED:
-          authService.setLoggedIn(false);
+          userService.setLoggedIn(false);
           router.navigate([RouteConstants.LOGIN_PATH]);
           break;
         default:
@@ -26,6 +32,6 @@ export const globalErrorInterceptor: HttpInterceptorFn = (
       }
 
       return throwError(() => error);
-    })
+    }),
   );
 };

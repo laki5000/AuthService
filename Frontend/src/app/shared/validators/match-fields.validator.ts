@@ -4,7 +4,7 @@ export function matchFieldsValidator(
   field: string,
   fieldAgain: string,
   errorKey: string,
-  displayField: string
+  displayField: string,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const first = control.get(field)?.value;
@@ -15,7 +15,7 @@ export function matchFieldsValidator(
     }
 
     return {
-      [errorKey]: { displayField }
+      [errorKey]: { displayField },
     };
   };
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../core/services/auth.service';
+import { UserService } from '../../core/services/user.service';
 import { RegisterDto } from '../../core/models/register.dto';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,7 +9,7 @@ import { RouteConstants } from '../../core/constants/route.constant';
 import { matchFieldsValidator } from '../../shared/validators/match-fields.validator';
 import { FormFieldConstants } from '../../core/constants/form-field.constant';
 import { FormGroupErrorKeyConstants } from '../../core/constants/form-error-key.constant';
-import { ValidationErrorDisplayComponent } from "../../shared/components/validation-error-display/validation-error-display.component";
+import { ValidationErrorDisplayComponent } from '../../shared/components/validation-error-display/validation-error-display.component';
 
 @Component({
   selector: 'app-register',
@@ -23,40 +23,43 @@ export class RegisterComponent extends BaseFormComponent {
 
   constructor(
     fb: FormBuilder,
-    private authService: AuthService,
+    private userService: UserService,
   ) {
     super(fb);
   }
 
   protected initForm(): void {
-    this.form = this.fb.group({
-      [this.formFields.USERNAME]: ['', Validators.required],
-      [this.formFields.EMAIL]: ['', [Validators.required, Validators.email]],
-      [this.formFields.EMAIL_AGAIN]: ['', [Validators.required, Validators.email]],
-      [this.formFields.PASSWORD]: ['', Validators.required],
-      [this.formFields.PASSWORD_AGAIN]: ['', Validators.required],
-      [this.formFields.FIRST_NAME]: [null],
-      [this.formFields.LAST_NAME]: [null],
-    },
-    {
-      validators: [
-        matchFieldsValidator(
-          FormFieldConstants.EMAIL, 
-          FormFieldConstants.EMAIL_AGAIN, 
-          FormGroupErrorKeyConstants.EMAILMISMATCH, 
-          FormFieldConstants.EMAIL_AGAIN),
-        matchFieldsValidator(
-          FormFieldConstants.PASSWORD, 
-          FormFieldConstants.PASSWORD_AGAIN, 
-          FormGroupErrorKeyConstants.PASSWORDMISMATCH, 
-          FormFieldConstants.PASSWORD_AGAIN
-        )
-      ]
-    });
+    this.form = this.fb.group(
+      {
+        [this.formFields.USERNAME]: ['', Validators.required],
+        [this.formFields.EMAIL]: ['', [Validators.required, Validators.email]],
+        [this.formFields.EMAIL_AGAIN]: ['', [Validators.required, Validators.email]],
+        [this.formFields.PASSWORD]: ['', Validators.required],
+        [this.formFields.PASSWORD_AGAIN]: ['', Validators.required],
+        [this.formFields.FIRST_NAME]: [null],
+        [this.formFields.LAST_NAME]: [null],
+      },
+      {
+        validators: [
+          matchFieldsValidator(
+            FormFieldConstants.EMAIL,
+            FormFieldConstants.EMAIL_AGAIN,
+            FormGroupErrorKeyConstants.EMAILMISMATCH,
+            FormFieldConstants.EMAIL_AGAIN,
+          ),
+          matchFieldsValidator(
+            FormFieldConstants.PASSWORD,
+            FormFieldConstants.PASSWORD_AGAIN,
+            FormGroupErrorKeyConstants.PASSWORDMISMATCH,
+            FormFieldConstants.PASSWORD_AGAIN,
+          ),
+        ],
+      },
+    );
   }
 
   protected submit(): void {
     const dto = this.form.value as RegisterDto;
-    this.authService.register(dto).subscribe();
+    this.userService.register(dto).subscribe();
   }
 }

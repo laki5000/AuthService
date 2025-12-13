@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-dashboard.component',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  constructor(private userService: UserService) {}
+
+  onRolesClick(): void {}
+
+  onAmIAdminClick(): void {
+    this.userService.amIAdmin().subscribe();
+  }
+}

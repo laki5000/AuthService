@@ -8,9 +8,8 @@ describe('ValidationErrorDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ValidationErrorDisplayComponent]
-    })
-    .compileComponents();
+      imports: [ValidationErrorDisplayComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ValidationErrorDisplayComponent);
     component = fixture.componentInstance;

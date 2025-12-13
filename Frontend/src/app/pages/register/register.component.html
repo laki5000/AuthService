@@ -3,7 +3,8 @@
     <label>
       <app-validation-error-display
         [control]="form.get(formFields.USERNAME)"
-        [fieldName]="formFields.USERNAME">
+        [fieldName]="formFields.USERNAME"
+      >
       </app-validation-error-display>
       Username
       <input type="text" formControlName="{{ formFields.USERNAME }}" />
@@ -12,7 +13,8 @@
     <label>
       <app-validation-error-display
         [control]="form.get(formFields.EMAIL)"
-        [fieldName]="formFields.EMAIL">
+        [fieldName]="formFields.EMAIL"
+      >
       </app-validation-error-display>
       Email
       <input type="email" formControlName="{{ formFields.EMAIL }}" />
@@ -21,7 +23,8 @@
     <label>
       <app-validation-error-display
         [control]="form.get(formFields.EMAIL_AGAIN)"
-        [fieldName]="formFields.EMAIL_AGAIN">
+        [fieldName]="formFields.EMAIL_AGAIN"
+      >
       </app-validation-error-display>
       Email again
       <input type="email" formControlName="{{ formFields.EMAIL_AGAIN }}" />
@@ -30,7 +33,8 @@
     <label>
       <app-validation-error-display
         [control]="form.get(formFields.PASSWORD)"
-        [fieldName]="formFields.PASSWORD">
+        [fieldName]="formFields.PASSWORD"
+      >
       </app-validation-error-display>
       Password
       <input type="password" formControlName="{{ formFields.PASSWORD }}" />
@@ -39,7 +43,8 @@
     <label>
       <app-validation-error-display
         [control]="form.get(formFields.PASSWORD_AGAIN)"
-        [fieldName]="formFields.PASSWORD_AGAIN">
+        [fieldName]="formFields.PASSWORD_AGAIN"
+      >
       </app-validation-error-display>
       Password again
       <input type="password" formControlName="{{ formFields.PASSWORD_AGAIN }}" />

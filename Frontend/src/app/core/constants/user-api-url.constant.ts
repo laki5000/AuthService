@@ -1,4 +1,4 @@
-import { environment } from "../../../environments/environment";
+import { environment } from '../../../environments/environment';
 
 const baseUrl = `${environment.apiBaseUrl}/api/User`;
 
@@ -7,4 +7,5 @@ export const UserApiUrlConstant = {
   register: `${baseUrl}/register`,
   logout: `${baseUrl}/logout`,
   checkAuth: `${baseUrl}/checkAuth`,
+  amIAdmin: `${baseUrl}/amIAdmin`,
 };

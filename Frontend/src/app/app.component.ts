@@ -4,10 +4,11 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { LoadingService } from './core/services/loading.service';
 import { Observable } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { LoadingOverlayComponent } from './shared/components/loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, NavbarComponent, AsyncPipe],
+  imports: [CommonModule, RouterOutlet, NavbarComponent, AsyncPipe, LoadingOverlayComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
