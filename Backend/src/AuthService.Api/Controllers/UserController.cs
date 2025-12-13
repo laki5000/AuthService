@@ -45,12 +45,12 @@ namespace AuthService.Api.Controllers
 
         [HttpPost("logout")]
         [Authorize]
-        [ProducesResponseType(typeof(ResultDto<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResultDto<bool>), StatusCodes.Status200OK)]
         public IActionResult Logout()
         {
             CookieHelper.DeleteJwtCookie(Request, Response);
 
-            var result = new ResultDto<string>();
+            var result = new ResultDto<bool> { Result = true };
             return Ok(result);
         }
 

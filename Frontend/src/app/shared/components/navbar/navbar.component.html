@@ -1,3 +1,5 @@
 <nav class="navbar">
-  <button (click)="logout()">Logout</button>
+  @if (loggedIn$ | async) {
+    <button (click)="logout()">Logout</button>
+  }
 </nav>

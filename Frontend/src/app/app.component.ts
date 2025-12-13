@@ -14,7 +14,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 export class App {
   loading$: Observable<boolean>;
 
-  constructor(loadingService: LoadingService) {
+  constructor(private loadingService: LoadingService) {
     this.loading$ = loadingService.loading$;
   }
 }

@@ -36,7 +36,7 @@ export class LoginComponent extends BaseFormComponent {
     const dto = this.form.value as LoginDto;
     this.authService.login(dto).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.router.navigate([RouteConstants.DashboardPath]);
       },
     });
   }
