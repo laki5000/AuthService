@@ -20,17 +20,17 @@ export class UserService {
     private router: Router,
   ) {}
 
-  login(request: LoginDto): Observable<ResultDto<string>> {
+  login(body: LoginDto): Observable<ResultDto<string>> {
     return this.restService
-      .post<ResultDto<string>>(`${UserApiUrlConstant.login}`, request)
+      .post<ResultDto<string>>(`${UserApiUrlConstant.login}`, body)
       .pipe(
         tap((result: ResultDto<string>) => this.loggedInSubject.next(result.Result ? true : false)),
       );
   }
 
-  register(request: RegisterDto): Observable<ResultDto<string>> {
+  register(body: RegisterDto): Observable<ResultDto<string>> {
     return this.restService
-      .post<ResultDto<string>>(`${UserApiUrlConstant.register}`, request)
+      .post<ResultDto<string>>(`${UserApiUrlConstant.register}`, body)
       .pipe(
         tap((result: ResultDto<string>) => this.loggedInSubject.next(result.Result ? true : false)),
       );

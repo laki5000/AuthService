@@ -19,7 +19,7 @@ const angularApp = new AngularNodeAppEngine();
  * Example:
  * ```ts
  * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
+ *   // Handle API body
  * });
  * ```
  */
@@ -36,7 +36,7 @@ app.use(
 );
 
 /**
- * Handle all other requests by rendering the Angular application.
+ * Handle all other bodys by rendering the Angular application.
  */
 app.use((req, res, next) => {
   angularApp

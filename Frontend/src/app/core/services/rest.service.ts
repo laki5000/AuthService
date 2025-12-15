@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class RestService {
   constructor(protected http: HttpClient) {}
 
-  public post<T>(url: string, body: any, options?: { headers?: HttpHeaders }): Observable<T> {
+  public post<T>(url: string, body?: any, options?: { headers?: HttpHeaders }): Observable<T> {
     return this.http.post<T>(url, body, {
       ...options,
       withCredentials: true,

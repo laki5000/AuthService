@@ -7,20 +7,20 @@ namespace AuthService.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RolesController : ControllerBase
+    public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;
 
-        public RolesController(IRoleService roleService)
+        public RoleController(IRoleService roleService)
         {
             _roleService = roleService;
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] string roleName)
+        public async Task<IActionResult> Create([FromBody] RoleDto roleDto)
         {
-            var result = await _roleService.CreateAsync(roleName);
+            var result = await _roleService.CreateAsync(roleDto.RoleName);
             return StatusCode(StatusCodes.Status201Created, result);
         }
 

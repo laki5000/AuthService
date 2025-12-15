@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Add role</h2>
+
+<mat-dialog-content>
+  <div class="form-container">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Role name</mat-label>
+        <input matInput formControlName="{{ formFields.ROLE_NAME }}" />
+        <mat-error>
+          <app-validation-error-display
+            [control]="form.get(formFields.ROLE_NAME)"
+            [fieldName]="formFields.ROLE_NAME"
+          ></app-validation-error-display>
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-flat-button [disabled]="form.invalid" type="submit">Submit</button>
+    </form>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

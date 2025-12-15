@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Roles</h2>
+
+<mat-dialog-content>
+  @if (roles.length > 0) {
+    <mat-list>
+      @for (role of roles; track role) {
+        <mat-list-item>
+          {{ role }}
+        </mat-list-item>
+      }
+    </mat-list>
+  } @else {
+    <p>No roles.</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button (click)="onUpdateUserRoleClick()">Update User Role</button>
+  <button mat-flat-button (click)="onAddRoleClick()">Add Role</button>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
