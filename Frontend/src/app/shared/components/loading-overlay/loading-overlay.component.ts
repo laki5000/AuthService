@@ -8,6 +8,4 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './loading-overlay.component.html',
   styleUrl: './loading-overlay.component.scss',
 })
-export class LoadingOverlayComponent {
-  @Input() loading?: boolean | null = false;
-}
+export class LoadingOverlayComponent {}

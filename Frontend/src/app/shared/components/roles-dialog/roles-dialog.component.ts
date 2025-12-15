@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
@@ -10,7 +10,11 @@ import { UpdateUserRoleDialogComponent } from '../update-user-role-dialog/update
 @Component({
   selector: 'app-roles-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, MatListModule],
+  imports: [
+    MatDialogModule, 
+    MatButtonModule,
+    MatListModule
+  ],
   templateUrl: './roles-dialog.component.html',
   styleUrl: './roles-dialog.component.scss',
 })
