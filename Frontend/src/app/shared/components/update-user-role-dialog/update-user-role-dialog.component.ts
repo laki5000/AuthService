@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ValidationErrorDisplayComponent } from '../validation-error-display/validation-error-display.component';
 import { UpdateUserRoleDto } from '../../../core/models/update-user-role.dto';
+import { ResultDto } from '../../../core/models/result.dto';
 
 @Component({
   selector: 'app-update-user-role-dialog.component',
@@ -30,6 +31,10 @@ import { UpdateUserRoleDto } from '../../../core/models/update-user-role.dto';
 export class UpdateUserRoleDialogComponent extends BaseFormComponent {
   roles: string[] = [];
 
+  get addFieldValue(): any {
+    return this.form.get(this.formFields.ADD)?.value;
+  }
+
   constructor(
     fb: FormBuilder,
     private userService: UserService,
@@ -43,7 +48,7 @@ export class UpdateUserRoleDialogComponent extends BaseFormComponent {
     this.form = this.fb.group({
       [this.formFields.USERNAME]: ['', Validators.required],
       [this.formFields.ROLE_NAME]: ['', Validators.required],
-      [this.formFields.ADD]: [false],
+      [this.formFields.ADD]: [true],
     });
   }
 
@@ -55,5 +60,10 @@ export class UpdateUserRoleDialogComponent extends BaseFormComponent {
 
   protected override submit(): void {
     const dto = this.form.value as UpdateUserRoleDto;
+    this.userService.updateUserRole(dto).subscribe({
+      next: (result: ResultDto<string>) => {
+        this.dialogRef.close();
+      },
+    });
   }
 }

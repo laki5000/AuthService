@@ -8,4 +8,5 @@ export const UserApiUrlConstant = {
   logout: `${baseUrl}/logout`,
   checkAuth: `${baseUrl}/checkAuth`,
   amIAdmin: `${baseUrl}/amIAdmin`,
+  updateUserRole: `${baseUrl}/updateUserRole`,
 };

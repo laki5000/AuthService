@@ -18,7 +18,7 @@
         <mat-label>Role</mat-label>
         <mat-select formControlName="{{ formFields.ROLE_NAME }}">
           @for (role of roles; track role) {
-            <mat-option>
+            <mat-option [value]="role">
               {{ role }}
             </mat-option>
           }
@@ -32,7 +32,7 @@
       </mat-form-field>
 
       <mat-slide-toggle formControlName="{{ formFields.ADD }}">
-        {{ form.get(formFields.ADD)?.value ? 'Add' : 'Remove' }}
+        {{ addFieldValue ? 'Add' : 'Remove' }}
       </mat-slide-toggle>
 
       <button mat-flat-button [disabled]="form.invalid" type="submit">Submit</button>

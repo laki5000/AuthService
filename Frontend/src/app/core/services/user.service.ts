@@ -7,6 +7,7 @@ import { RegisterDto } from '../models/register.dto';
 import { UserApiUrlConstant } from '../constants/user-api-url.constant';
 import { Router } from '@angular/router';
 import { RouteConstants } from '../constants/route.constant';
+import { UpdateUserRoleDto } from '../models/update-user-role.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -56,6 +57,10 @@ export class UserService {
 
   amIAdmin(): Observable<ResultDto<boolean>> {
     return this.restService.get<ResultDto<boolean>>(`${UserApiUrlConstant.amIAdmin}`);
+  }
+
+  updateUserRole(body: UpdateUserRoleDto): Observable<ResultDto<string>> {
+    return this.restService.post<ResultDto<string>>(`${UserApiUrlConstant.updateUserRole}`, body);
   }
 
   setLoggedIn(value: boolean): void {

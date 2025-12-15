@@ -72,7 +72,7 @@ namespace AuthService.Api.Controllers
         }
 
         [HttpGet("amIAdmin")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(ResultDto<string>), StatusCodes.Status200OK)]
         public IActionResult AmIAdmin()
         {
