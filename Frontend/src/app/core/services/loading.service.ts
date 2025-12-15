@@ -9,16 +9,16 @@ import { LoadingOverlayComponent } from '../../shared/components/loading-overlay
 export class LoadingService {
   private overlayRef: OverlayRef | undefined;
 
-  constructor(private overlay: Overlay, private injector: Injector) {}
-  
+  constructor(
+    private overlay: Overlay,
+    private injector: Injector,
+  ) {}
+
   showLoading() {
     if (!this.overlayRef) {
       this.overlayRef = this.overlay.create({
         hasBackdrop: true,
-        positionStrategy: this.overlay.position()
-          .global()
-          .centerHorizontally()
-          .centerVertically(),
+        positionStrategy: this.overlay.position().global().centerHorizontally().centerVertically(),
         scrollStrategy: this.overlay.scrollStrategies.block(),
       });
     }

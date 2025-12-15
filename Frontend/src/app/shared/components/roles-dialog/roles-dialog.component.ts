@@ -10,11 +10,7 @@ import { UpdateUserRoleDialogComponent } from '../update-user-role-dialog/update
 @Component({
   selector: 'app-roles-dialog',
   standalone: true,
-  imports: [
-    MatDialogModule, 
-    MatButtonModule,
-    MatListModule
-  ],
+  imports: [MatDialogModule, MatButtonModule, MatListModule],
   templateUrl: './roles-dialog.component.html',
   styleUrl: './roles-dialog.component.scss',
 })
@@ -59,6 +55,7 @@ export class RolesDialogComponent {
   private openUpdateUserRoleDialog(): void {
     this.dialog.open(UpdateUserRoleDialogComponent, {
       width: '400px',
+      data: { roles: this.roles },
     });
   }
 }

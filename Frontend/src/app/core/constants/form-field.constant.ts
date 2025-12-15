@@ -8,4 +8,5 @@ export const FormFieldConstants = {
   LAST_NAME: 'LastName',
 
   ROLE_NAME: 'roleName',
+  ADD: 'add'
 };

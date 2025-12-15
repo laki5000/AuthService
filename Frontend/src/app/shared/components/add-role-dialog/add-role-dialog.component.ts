@@ -39,6 +39,8 @@ export class AddRoleDialogComponent extends BaseFormComponent {
     });
   }
 
+  protected override localNgOnInit(): void {}
+
   protected override submit(): void {
     const dto = this.form.value as RoleDto;
     this.roleService.create(dto).subscribe({

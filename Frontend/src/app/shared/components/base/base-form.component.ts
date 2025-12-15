@@ -13,8 +13,10 @@ export abstract class BaseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.localNgOnInit();
   }
 
   protected abstract initForm(): void;
   protected abstract submit(): void;
+  protected abstract localNgOnInit(): void;
 }

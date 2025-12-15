@@ -38,6 +38,8 @@ export class RegisterComponent extends BaseFormComponent {
     super(fb);
   }
 
+  protected override localNgOnInit(): void {}
+
   protected initForm(): void {
     this.form = this.fb.group({
       [this.formFields.USERNAME]: ['', Validators.required],

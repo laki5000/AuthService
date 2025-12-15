@@ -11,9 +11,7 @@ import { UserService } from './core/services/user.service';
   styleUrl: './app.component.scss',
 })
 export class App implements OnInit {
-  constructor(
-    private userService: UserService,
-  ) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.userService.monitorLoginStatus();

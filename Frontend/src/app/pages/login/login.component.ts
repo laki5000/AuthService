@@ -44,6 +44,8 @@ export class LoginComponent extends BaseFormComponent {
     });
   }
 
+  protected override localNgOnInit(): void {}
+
   protected submit(): void {
     const dto = this.form.value as LoginDto;
     this.userService.login(dto).subscribe({

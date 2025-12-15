@@ -63,11 +63,11 @@ namespace AuthService.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("updateUserRole/{username}")]
+        [HttpPost("updateUserRole")]
         [Authorize]
-        public async Task<IActionResult> UpdateUserRole(string username, [FromQuery] string role, [FromQuery] bool add = true)
+        public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleDto dto)
         {
-            var result = await _userService.UpdateUserRole(username, role, add);
+            var result = await _userService.UpdateUserRole(dto.Username, dto.RoleName, dto.Add);
             return Ok(result);
         }
 
