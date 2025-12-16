@@ -67,7 +67,7 @@ namespace AuthService.Api.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleDto dto)
         {
-            var result = await _authService.UpdateUserRoleAsync(dto.Username, dto.RoleName, dto.Add);
+            var result = await _authService.UpdateUserRoleAsync(dto);
             return Ok(result);
         }
 

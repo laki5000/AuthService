@@ -6,8 +6,8 @@ namespace AuthService.Application.Interfaces.Services
     {
         Task<ResultDto<string>> RegisterAsync(RegisterDto dto);
         Task<ResultDto<string>> LoginAsync(LoginDto dto);
-        Task<ResultDto<string>> UpdateUserRoleAsync(string username, string role, bool add);
+        Task<ResultDto<string>> UpdateUserRoleAsync(UpdateUserRoleDto dto);
         Task<ResultDto<string>> CreateRoleAsync(string role);
-        ResultDto<IEnumerable<string>> GetAllRolesAsync();
+        Task<ResultDto<IEnumerable<string>>> GetAllRolesAsync();
     }
 }

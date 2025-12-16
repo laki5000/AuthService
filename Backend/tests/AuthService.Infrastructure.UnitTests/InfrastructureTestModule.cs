@@ -45,7 +45,7 @@ namespace AuthService.Infrastructure.UnitTests
             services.AddSingleton(TokenServiceMock.Object);
 
             services.AddScoped<JwtTokenService>();
-            services.AddScoped<IdentityAuthService>();
+            services.AddScoped<IdentityService>();
 
             Provider = services.BuildServiceProvider();
         }
