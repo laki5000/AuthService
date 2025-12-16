@@ -31,8 +31,10 @@ namespace AuthService.Application.UnitTests.Services
             var user = new Mock<IUser>().Object;
             var roles = new List<string>();
 
-            _identityServiceMock.Setup(i => i.ValidateUserCredentialsAndGetRolesAsync(dto))
-                .ReturnsAsync((user, roles));
+            _identityServiceMock.Setup(i => i.ValidateUserCredentialsAsync(dto))
+                .ReturnsAsync(user);
+            _identityServiceMock.Setup(i => i.GetUserRoles(user))
+                .ReturnsAsync(roles);
             _tokenServiceMock.Setup(t => t.GenerateToken(user, roles))
                 .Returns(Constants.JWT_TOKEN);
 

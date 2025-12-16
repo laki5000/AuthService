@@ -17,7 +17,8 @@ namespace AuthService.Application.Services
 
         public async Task<ResultDto<string>> LoginAsync(LoginDto dto)
         {
-            var (user, roles) = await _identityService.ValidateUserCredentialsAndGetRolesAsync(dto);
+            var user = await _identityService.ValidateUserCredentialsAsync(dto);
+            var roles = await _identityService.GetUserRoles(user);
             var token = _tokenService.GenerateToken(user, roles);
 
             return new ResultDto<string> { Result = token };

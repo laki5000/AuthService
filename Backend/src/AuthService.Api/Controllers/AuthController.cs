@@ -94,9 +94,9 @@ namespace AuthService.Api.Controllers
         [HttpGet("getAllRoles")]
         [Authorize]
         [ProducesResponseType(typeof(ResultDto<IEnumerable<string>>), StatusCodes.Status200OK)]
-        public IActionResult GetAllRoles()
+        public async Task<IActionResult> GetAllRoles()
         {
-            var result = _authService.GetAllRolesAsync();
+            var result = await _authService.GetAllRolesAsync();
             return Ok(result);
         }
     }

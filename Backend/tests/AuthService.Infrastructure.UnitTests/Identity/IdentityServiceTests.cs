@@ -1,6 +1,7 @@
 ﻿using AuthService.Application.Constants;
 using AuthService.Application.Exceptions;
 using AuthService.Domain.DTOs;
+using AuthService.Domain.Entities;
 using AuthService.Infrastructure.Identity;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
@@ -26,18 +27,18 @@ namespace AuthService.Infrastructure.UnitTests.Identity
         }
 
         [Fact]
-        public async Task ValidateUserCredentialsAndGetRolesAsync_WithInvalidUsername_ShouldThrowAuthenticationException()
+        public async Task ValidateUserCredentialsAsync_WithInvalidUsername_ShouldThrowAuthenticationException()
         {
             var dto = new LoginDto { Username = Constants.NONEXISTENT_USERNAME, Password = Constants.VALID_PASSWORD };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username)).ReturnsAsync((MyIdentityUser?)null);
 
-            await FluentActions.Invoking(() => _identityService.ValidateUserCredentialsAndGetRolesAsync(dto))
+            await FluentActions.Invoking(() => _identityService.ValidateUserCredentialsAsync(dto))
                 .Should().ThrowAsync<AuthenticationException>()
                 .WithMessage(ErrorMessages.InvalidCredentials);
         }
 
         [Fact]
-        public async Task ValidateUserCredentialsAndGetRolesAsync_WithWrongPassword_ShouldThrowAuthenticationException()
+        public async Task ValidateUserCredentialsAsync_WithWrongPassword_ShouldThrowAuthenticationException()
         {
             var user = new MyIdentityUser { UserName = Constants.EXISTING_USERNAME };
             var dto = new LoginDto { Username = Constants.EXISTING_USERNAME, Password = Constants.INVALID_PASSWORD };
@@ -45,26 +46,49 @@ namespace AuthService.Infrastructure.UnitTests.Identity
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username)).ReturnsAsync(user);
             _signInManagerMock.Setup(s => s.CheckPasswordSignInAsync(user, dto.Password, false)).ReturnsAsync(SignInResult.Failed);
 
-            await FluentActions.Invoking(() => _identityService.ValidateUserCredentialsAndGetRolesAsync(dto))
+            await FluentActions.Invoking(() => _identityService.ValidateUserCredentialsAsync(dto))
                 .Should().ThrowAsync<AuthenticationException>()
                 .WithMessage(ErrorMessages.InvalidCredentials);
         }
 
         [Fact]
-        public async Task ValidateUserCredentialsAndGetRolesAsync_WithValidCredentials_ShouldReturnUserAndRoles()
+        public async Task ValidateUserCredentialsAsync_WithValidCredentials_ShouldReturnUser()
         {
             var user = new MyIdentityUser { UserName = Constants.EXISTING_USERNAME };
-            var roles = new List<string> { Constants.TEST_ROLE1, Constants.TEST_ROLE2 };
             var dto = new LoginDto { Username = Constants.EXISTING_USERNAME, Password = Constants.VALID_PASSWORD };
 
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username)).ReturnsAsync(user);
             _signInManagerMock.Setup(s => s.CheckPasswordSignInAsync(user, dto.Password, false)).ReturnsAsync(SignInResult.Success);
-            _userManagerMock.Setup(u => u.GetRolesAsync(user)).ReturnsAsync(roles);
 
-            var result = await _identityService.ValidateUserCredentialsAndGetRolesAsync(dto);
+            var result = await _identityService.ValidateUserCredentialsAsync(dto);
 
-            result.user.Should().Be(user);
-            result.roles.Should().BeEquivalentTo(roles);
+            result.Should().Be(user);
+        }
+
+        [Fact]
+        public async Task GetUserRoles_WhenUserIsNotMyIdentityUser_ReturnsRoles()
+        {
+            var user = new MyIdentityUser();
+            var roles = new List<string> { Constants.TEST_ROLE1, Constants.TEST_ROLE2 };
+
+            _userManagerMock
+                .Setup(um => um.GetRolesAsync(user))
+                .ReturnsAsync(roles);
+
+            var result = await _identityService.GetUserRoles(user);
+
+            Assert.Equal(roles, result);
+        }
+
+        [Fact]
+        public async Task GetUserRoles_WhenUserIsMyIdentityUser_ShouldThrowOperationFailedException()
+        {
+            var user = new Mock<IUser>().Object;
+
+            var ex = await Assert.ThrowsAsync<OperationFailedException>(
+                () => _identityService.GetUserRoles(user));
+
+            Assert.Equal(ErrorMessages.RolesOnlyForMyIdentityUser, ex.Message);
         }
 
 

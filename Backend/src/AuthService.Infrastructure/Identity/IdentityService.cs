@@ -4,7 +4,6 @@ using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.DTOs;
 using AuthService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 namespace AuthService.Infrastructure.Identity
 {
@@ -24,7 +23,7 @@ namespace AuthService.Infrastructure.Identity
             _signInManager = signInManager;
         }
 
-        public async Task<(IUser user, IEnumerable<string> roles)> ValidateUserCredentialsAndGetRolesAsync(LoginDto dto)
+        public async Task<IUser> ValidateUserCredentialsAsync(LoginDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Username)
                 ?? throw new AuthenticationException(ErrorMessages.InvalidCredentials);
@@ -33,9 +32,15 @@ namespace AuthService.Infrastructure.Identity
             if (!result.Succeeded)
                 throw new AuthenticationException(ErrorMessages.InvalidCredentials);
 
-            var roles = await _userManager.GetRolesAsync(user);
+            return user;
+        }
 
-            return (user, roles);
+        public async Task<IEnumerable<string>> GetUserRoles(IUser user)
+        {
+            if (user is MyIdentityUser identityUser)
+                return await _userManager.GetRolesAsync(identityUser);
+
+            throw new OperationFailedException(ErrorMessages.RolesOnlyForMyIdentityUser);
         }
 
         public async Task<IUser> CreateUserAsync(RegisterDto dto)

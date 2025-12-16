@@ -5,7 +5,8 @@ namespace AuthService.Application.Interfaces.Services
 {
     public interface IIdentityService
     {
-        Task<(IUser user, IEnumerable<string> roles)> ValidateUserCredentialsAndGetRolesAsync(LoginDto dto);
+        Task<IUser> ValidateUserCredentialsAsync(LoginDto dto);
+        Task<IEnumerable<string>> GetUserRoles(IUser user);
         Task<IUser> CreateUserAsync(RegisterDto dto);
         Task UpdateUserRoleAsync(UpdateUserRoleDto dto);
         Task<string> CreateRoleAsync(string role);
