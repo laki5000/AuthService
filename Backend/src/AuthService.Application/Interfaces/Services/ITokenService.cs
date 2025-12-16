@@ -5,6 +5,6 @@ namespace AuthService.Application.Interfaces.Services
 {
     public interface ITokenService
     {
-        string GenerateToken(User user, IEnumerable<string> roles);
+        string GenerateToken(IUser user, IEnumerable<string> roles);
     }
 }

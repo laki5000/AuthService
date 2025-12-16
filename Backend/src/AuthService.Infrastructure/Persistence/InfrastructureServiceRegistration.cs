@@ -17,15 +17,15 @@ namespace AuthService.Infrastructure.Persistence
             services.AddDbContext<ApplicationDbContext>(opt =>
                 opt.UseNpgsql(conn));
 
-            services.AddIdentityCore<User>(options =>
+            services.AddIdentityCore<MyIdentityUser>(options =>
             {
                 IdentityConfig.Configure(options);
             })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddSignInManager<SignInManager<User>>();
+            .AddSignInManager<SignInManager<MyIdentityUser>>();
 
-            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ITokenService, JwtTokenService>();
 
             return services;
         }

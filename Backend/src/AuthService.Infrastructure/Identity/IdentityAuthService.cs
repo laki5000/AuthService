@@ -2,23 +2,22 @@
 using AuthService.Application.Exceptions;
 using AuthService.Application.Interfaces.Services;
 using AuthService.Domain.DTOs;
-using AuthService.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace AuthService.Application.Services
+namespace AuthService.Infrastructure.Identity
 {
-    public class UserService : IUserService
+    public class IdentityAuthService : IAuthService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<MyIdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<MyIdentityUser> _signInManager;
         private readonly ITokenService _tokenService;
 
-        public UserService(
-        UserManager<User> userManager,
+        public IdentityAuthService(
+        UserManager<MyIdentityUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        SignInManager<User> signInManager,
+        SignInManager<MyIdentityUser> signInManager,
         ITokenService tokenService)
         {
             _userManager = userManager;
@@ -49,7 +48,7 @@ namespace AuthService.Application.Services
             if (existing != null)
                 throw new ConflictException(ErrorMessages.UsernameAlreadyExists);
 
-            var user = new User
+            var user = new MyIdentityUser
             {
                 UserName = dto.Username,
                 Email = dto.Email,
@@ -68,7 +67,7 @@ namespace AuthService.Application.Services
             return new ResultDto<string> { Result = token, StatusCode = StatusCodes.Status201Created };
         }
 
-        public async Task<ResultDto<string>> UpdateUserRole(string username, string role, bool add)
+        public async Task<ResultDto<string>> UpdateUserRoleAsync(string username, string role, bool add)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
@@ -94,6 +93,37 @@ namespace AuthService.Application.Services
             }
 
             return new ResultDto<string>();
+        }
+
+        public async Task<ResultDto<string>> CreateRoleAsync(string role)
+        {
+            if (string.IsNullOrWhiteSpace(role))
+                throw new ValidationException(ErrorMessages.RoleNameCannotBeEmpty);
+
+            var roleExist = await _roleManager.RoleExistsAsync(role);
+            if (roleExist)
+                throw new ConflictException(ErrorMessages.RoleAlreadyExists);
+
+            var result = await _roleManager.CreateAsync(new IdentityRole(role));
+            if (!result.Succeeded)
+            {
+                var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new OperationFailedException(errorMessage);
+            }
+
+            return new ResultDto<string> { Result = role };
+        }
+
+        public ResultDto<IEnumerable<string>> GetAllRolesAsync()
+        {
+            var roles = _roleManager.Roles
+                .Select(r => r.Name!)
+                .ToList();
+
+            return new ResultDto<IEnumerable<string>>
+            {
+                Result = roles ?? Enumerable.Empty<string>()
+            };
         }
     }
 }

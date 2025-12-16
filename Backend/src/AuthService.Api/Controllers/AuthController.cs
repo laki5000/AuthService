@@ -10,15 +10,15 @@ namespace AuthService.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class AuthController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
         private readonly JwtOptions _jwtOptions;
 
-        public UserController(IUserService userService, IOptions<JwtOptions> jwtOptions)
+        public AuthController(IAuthService authService, IOptions<JwtOptions> jwtOptions)
         {
-            _userService = userService;
+            _authService = authService;
 
             _jwtOptions = jwtOptions.Value;
         }
@@ -26,7 +26,7 @@ namespace AuthService.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            var result = await _userService.RegisterAsync(dto);
+            var result = await _authService.RegisterAsync(dto);
 
             CookieHelper.SetJwtCookie(Response, result.Result!, _jwtOptions.ExpiresMinutes);
 
@@ -36,7 +36,7 @@ namespace AuthService.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var result = await _userService.LoginAsync(dto);
+            var result = await _authService.LoginAsync(dto);
 
             CookieHelper.SetJwtCookie(Response, result.Result!, _jwtOptions.ExpiresMinutes);
 
@@ -67,7 +67,7 @@ namespace AuthService.Api.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleDto dto)
         {
-            var result = await _userService.UpdateUserRole(dto.Username, dto.RoleName, dto.Add);
+            var result = await _authService.UpdateUserRoleAsync(dto.Username, dto.RoleName, dto.Add);
             return Ok(result);
         }
 
@@ -80,6 +80,23 @@ namespace AuthService.Api.Controllers
             {
                 Success = true
             };
+            return Ok(result);
+        }
+
+        [HttpPost("createRole")]
+        [Authorize]
+        public async Task<IActionResult> CreateRole([FromBody] RoleDto roleDto)
+        {
+            var result = await _authService.CreateRoleAsync(roleDto.RoleName);
+            return StatusCode(StatusCodes.Status201Created, result);
+        }
+
+        [HttpGet("getAllRoles")]
+        [Authorize]
+        [ProducesResponseType(typeof(ResultDto<IEnumerable<string>>), StatusCodes.Status200OK)]
+        public IActionResult GetAllRoles()
+        {
+            var result = _authService.GetAllRolesAsync();
             return Ok(result);
         }
     }

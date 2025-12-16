@@ -8,16 +8,16 @@ using System.Text;
 
 namespace AuthService.Infrastructure.Security
 {
-    public class TokenService : ITokenService
+    public class JwtTokenService : ITokenService
     {
         private readonly JwtOptions _jwtOptions;
 
-        public TokenService(IOptions<JwtOptions> options)
+        public JwtTokenService(IOptions<JwtOptions> options)
         {
             _jwtOptions = options.Value;
         }
 
-        public string GenerateToken(User user, IEnumerable<string> roles)
+        public string GenerateToken(IUser user, IEnumerable<string> roles)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

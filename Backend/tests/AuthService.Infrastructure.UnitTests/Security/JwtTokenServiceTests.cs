@@ -1,33 +1,35 @@
-﻿using AuthService.Domain.Entities;
+﻿using AuthService.Infrastructure.Identity;
 using AuthService.Infrastructure.Security;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace AuthService.Infrastructure.UnitTests.Security
 {
-    public class TokenServiceTests
+    public class JwtTokenServiceTests
     {
-        private readonly TokenService _tokenService;
+        private readonly JwtTokenService _tokenService;
         private readonly JwtOptions _jwtOptionsMock;
 
-        public TokenServiceTests()
+        public JwtTokenServiceTests()
         {
             var module = new InfrastructureTestModule();
 
-            _tokenService = module.TokenService;
-            _jwtOptionsMock = module.JwtOptions;
+            _tokenService = module.GetScopedService<JwtTokenService>();
+            _jwtOptionsMock = module.Provider.GetRequiredService<IOptions<JwtOptions>>().Value;
         }
 
         [Fact]
         public void GenerateToken_WhenSuccessful_ShouldReturnValidToken()
         {
-            var user = new User
+            var user = new MyIdentityUser
             {
                 Id = Constants.ID,
-                UserName = Constants.USERNAME,
+                UserName = Constants.NEW_USERNAME,
                 Email = Constants.EMAIL
             };
-            var roles = new List<string> { Constants.ROLE1, Constants.ROLE2 };
+            var roles = new List<string> { Constants.TEST_ROLE1, Constants.TEST_ROLE2 };
 
             var tokenString = _tokenService.GenerateToken(user, roles);
 
@@ -37,8 +39,8 @@ namespace AuthService.Infrastructure.UnitTests.Security
             Assert.Contains(token.Claims, c => c.Type == JwtRegisteredClaimNames.Sub && c.Value == user.Id);
             Assert.Contains(token.Claims, c => c.Type == JwtRegisteredClaimNames.UniqueName && c.Value == user.UserName);
             Assert.Contains(token.Claims, c => c.Type == JwtRegisteredClaimNames.Email && c.Value == user.Email);
-            Assert.Contains(token.Claims, c => c.Type == ClaimTypes.Role && c.Value == Constants.ROLE1);
-            Assert.Contains(token.Claims, c => c.Type == ClaimTypes.Role && c.Value == Constants.ROLE2);
+            Assert.Contains(token.Claims, c => c.Type == ClaimTypes.Role && c.Value == Constants.TEST_ROLE1);
+            Assert.Contains(token.Claims, c => c.Type == ClaimTypes.Role && c.Value == Constants.TEST_ROLE2);
 
             var expectedExpiry = DateTime.UtcNow.AddMinutes(_jwtOptionsMock.ExpiresMinutes);
             Assert.True((token.ValidTo - expectedExpiry).TotalSeconds < 5);

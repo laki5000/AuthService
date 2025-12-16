@@ -1,6 +1,7 @@
 ﻿using AuthService.Api.Filters;
 using AuthService.Application.Interfaces.Services;
-using AuthService.Application.Services;
+using AuthService.Domain.Entities;
+using AuthService.Infrastructure.Identity;
 
 namespace AuthService.Api.Extensions
 {
@@ -8,8 +9,8 @@ namespace AuthService.Api.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IAuthService, IdentityAuthService>();
+            services.AddSingleton<IUserFactory, MyIdentityUserFactory>();
             return services;
         }
 
