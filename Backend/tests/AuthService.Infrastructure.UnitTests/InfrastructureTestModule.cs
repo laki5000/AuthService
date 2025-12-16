@@ -1,6 +1,4 @@
-﻿using AuthService.Application.Interfaces.Services;
-using AuthService.Domain.Entities;
-using AuthService.Infrastructure.Identity;
+﻿using AuthService.Infrastructure.Identity;
 using AuthService.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +17,6 @@ namespace AuthService.Infrastructure.UnitTests
         public Mock<UserManager<MyIdentityUser>> UserManagerMock { get; }
         public Mock<RoleManager<IdentityRole>> RoleManagerMock { get; }
         public Mock<SignInManager<MyIdentityUser>> SignInManagerMock { get; }
-        public Mock<ITokenService> TokenServiceMock { get; }
 
         public InfrastructureTestModule()
         {
@@ -37,12 +34,10 @@ namespace AuthService.Infrastructure.UnitTests
             UserManagerMock = CreateUserManagerMock();
             RoleManagerMock = CreateRoleManagerMock();
             SignInManagerMock = CreateSignInManagerMock(UserManagerMock.Object);
-            TokenServiceMock = new Mock<ITokenService>();
 
             services.AddSingleton(UserManagerMock.Object);
             services.AddSingleton(RoleManagerMock.Object);
             services.AddSingleton(SignInManagerMock.Object);
-            services.AddSingleton(TokenServiceMock.Object);
 
             services.AddScoped<JwtTokenService>();
             services.AddScoped<IdentityService>();
