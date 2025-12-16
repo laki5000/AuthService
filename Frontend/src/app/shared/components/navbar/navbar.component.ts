@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserService } from '../../../core/services/user.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { RouteConstants } from '../../../core/constants/route.constant';
 import { Observable } from 'rxjs';
@@ -17,14 +17,14 @@ export class NavbarComponent {
   loggedIn$: Observable<boolean>;
 
   constructor(
-    private userService: UserService,
+    private authService: AuthService,
     private router: Router,
   ) {
-    this.loggedIn$ = this.userService.loggedIn$;
+    this.loggedIn$ = this.authService.loggedIn$;
   }
 
   logout(): void {
-    this.userService.logout().subscribe({
+    this.authService.logout().subscribe({
       next: () => {
         this.router.navigate([RouteConstants.LOGIN_PATH]);
       },

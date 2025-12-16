@@ -9,19 +9,19 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { HttpStatus } from '../constants/http-status.constant';
 import { inject } from '@angular/core';
-import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 
 export const globalErrorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
-  const userService = inject(UserService);
+  const authService = inject(AuthService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case HttpStatus.UNAUTHORIZED:
-          userService.setLoggedIn(false);
+          authService.setLoggedIn(false);
           break;
         default:
           break;

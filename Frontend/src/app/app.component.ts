@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
-import { UserService } from './core/services/user.service';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +11,9 @@ import { UserService } from './core/services/user.service';
   styleUrl: './app.component.scss',
 })
 export class App implements OnInit {
-  constructor(private userService: UserService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.userService.monitorLoginStatus();
+    this.authService.monitorLoginStatus();
   }
 }

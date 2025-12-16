@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { BaseFormComponent } from '../base/base-form.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserService } from '../../../core/services/user.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -37,7 +37,7 @@ export class UpdateUserRoleDialogComponent extends BaseFormComponent {
 
   constructor(
     fb: FormBuilder,
-    private userService: UserService,
+    private authService: AuthService,
     private dialogRef: MatDialogRef<UpdateUserRoleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { roles: string[] },
   ) {
@@ -60,7 +60,7 @@ export class UpdateUserRoleDialogComponent extends BaseFormComponent {
 
   protected override submit(): void {
     const dto = this.form.value as UpdateUserRoleDto;
-    this.userService.updateUserRole(dto).subscribe({
+    this.authService.updateUserRole(dto).subscribe({
       next: (result: ResultDto<string>) => {
         this.dialogRef.close();
       },

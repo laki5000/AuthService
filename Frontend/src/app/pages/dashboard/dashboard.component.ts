@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserService } from '../../core/services/user.service';
+import { AuthService } from '../../core/services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RolesDialogComponent } from '../../shared/components/roles-dialog/roles-dialog.component';
@@ -13,7 +13,7 @@ import { RolesDialogComponent } from '../../shared/components/roles-dialog/roles
 })
 export class DashboardComponent {
   constructor(
-    private userService: UserService,
+    private authService: AuthService,
     private dialog: MatDialog,
   ) {}
 
@@ -26,7 +26,7 @@ export class DashboardComponent {
   }
 
   onAmIAdminClick(): void {
-    this.userService.amIAdmin().subscribe();
+    this.authService.amIAdmin().subscribe();
   }
 
   private openRolesDialog(): MatDialogRef<RolesDialogComponent> {

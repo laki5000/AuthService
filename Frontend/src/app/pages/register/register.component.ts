@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { UserService } from '../../core/services/user.service';
+import { AuthService } from '../../core/services/auth.service';
 import { RegisterDto } from '../../core/models/register.dto';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -33,7 +33,7 @@ export class RegisterComponent extends BaseFormComponent {
 
   constructor(
     fb: FormBuilder,
-    private userService: UserService,
+    private authService: AuthService,
   ) {
     super(fb);
   }
@@ -70,6 +70,6 @@ export class RegisterComponent extends BaseFormComponent {
 
   protected submit(): void {
     const dto = this.form.value as RegisterDto;
-    this.userService.register(dto).subscribe();
+    this.authService.register(dto).subscribe();
   }
 }

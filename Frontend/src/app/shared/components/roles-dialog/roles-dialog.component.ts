@@ -2,10 +2,10 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
-import { RoleService } from '../../../core/services/role.service';
 import { ResultDto } from '../../../core/models/result.dto';
 import { AddRoleDialogComponent } from '../add-role-dialog/add-role-dialog.component';
 import { UpdateUserRoleDialogComponent } from '../update-user-role-dialog/update-user-role-dialog.component';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-roles-dialog',
@@ -18,13 +18,13 @@ export class RolesDialogComponent {
   roles: string[] = [];
 
   constructor(
-    private roleService: RoleService,
+    private authService: AuthService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
   ) {}
 
   getRoles(): void {
-    this.roleService.getAll().subscribe({
+    this.authService.getAll().subscribe({
       next: (result: ResultDto<string[]>) => {
         this.roles = result.Result ?? [];
         this.cdr.detectChanges();

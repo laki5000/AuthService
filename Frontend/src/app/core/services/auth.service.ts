@@ -4,15 +4,16 @@ import { BehaviorSubject, catchError, Observable, of, skip, tap } from 'rxjs';
 import { RestService } from './rest.service';
 import { ResultDto } from '../models/result.dto';
 import { RegisterDto } from '../models/register.dto';
-import { UserApiUrlConstant } from '../constants/user-api-url.constant';
+import { AuthApiUrlConstant } from '../constants/auth-api-url.constant';
 import { Router } from '@angular/router';
 import { RouteConstants } from '../constants/route.constant';
 import { UpdateUserRoleDto } from '../models/update-user-role.dto';
+import { RoleDto } from '../models/role.dto';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class AuthService {
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   loggedIn$ = this.loggedInSubject.asObservable();
 
@@ -23,7 +24,7 @@ export class UserService {
 
   login(body: LoginDto): Observable<ResultDto<string>> {
     return this.restService
-      .post<ResultDto<string>>(`${UserApiUrlConstant.login}`, body)
+      .post<ResultDto<string>>(`${AuthApiUrlConstant.login}`, body)
       .pipe(
         tap((result: ResultDto<string>) => this.loggedInSubject.next(result.Result ? true : false)),
       );
@@ -31,7 +32,7 @@ export class UserService {
 
   register(body: RegisterDto): Observable<ResultDto<string>> {
     return this.restService
-      .post<ResultDto<string>>(`${UserApiUrlConstant.register}`, body)
+      .post<ResultDto<string>>(`${AuthApiUrlConstant.register}`, body)
       .pipe(
         tap((result: ResultDto<string>) => this.loggedInSubject.next(result.Result ? true : false)),
       );
@@ -39,7 +40,7 @@ export class UserService {
 
   logout(): Observable<ResultDto<boolean>> {
     return this.restService
-      .post<ResultDto<boolean>>(`${UserApiUrlConstant.logout}`, null)
+      .post<ResultDto<boolean>>(`${AuthApiUrlConstant.logout}`, null)
       .pipe(
         tap((result: ResultDto<boolean>) =>
           this.loggedInSubject.next(result.Result ? false : true),
@@ -48,7 +49,7 @@ export class UserService {
   }
 
   checkAuth(): Observable<ResultDto<boolean>> {
-    return this.restService.get<ResultDto<boolean>>(`${UserApiUrlConstant.checkAuth}`).pipe(
+    return this.restService.get<ResultDto<boolean>>(`${AuthApiUrlConstant.checkAuth}`).pipe(
       tap((result: ResultDto<boolean>) => {
         this.loggedInSubject.next(result.Result ?? false);
       }),
@@ -56,11 +57,19 @@ export class UserService {
   }
 
   amIAdmin(): Observable<ResultDto<boolean>> {
-    return this.restService.get<ResultDto<boolean>>(`${UserApiUrlConstant.amIAdmin}`);
+    return this.restService.get<ResultDto<boolean>>(`${AuthApiUrlConstant.amIAdmin}`);
   }
 
   updateUserRole(body: UpdateUserRoleDto): Observable<ResultDto<string>> {
-    return this.restService.post<ResultDto<string>>(`${UserApiUrlConstant.updateUserRole}`, body);
+    return this.restService.post<ResultDto<string>>(`${AuthApiUrlConstant.updateUserRole}`, body);
+  }
+
+  getAll(): Observable<ResultDto<string[]>> {
+    return this.restService.get<ResultDto<string[]>>(`${AuthApiUrlConstant.getAllRoles}`);
+  }
+
+  create(body: RoleDto): Observable<ResultDto<string>> {
+    return this.restService.post<ResultDto<string>>(`${AuthApiUrlConstant.createRole}`, body);
   }
 
   setLoggedIn(value: boolean): void {
