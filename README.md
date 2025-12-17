@@ -1,27 +1,25 @@
-ASP.NET + Angular Practice Project
+# ASP.NET + Angular Practice Project
 
-This is a simple practice project demonstrating a full-stack application with ASP.NET backend and Angular frontend.
+A practice project demonstrating a full-stack application with ASP.NET backend and Angular frontend.
 
-Backend
+---
 
-ASP.NET Core with Clean Architecture (slightly over-engineered for practice)
+## Backend
 
-REST API
+- **Architecture:** Clean Architecture (slightly over-engineered for practice)  
+- **API:** REST  
+- **Authentication:** Simple Identity with PostgreSQL (login, roles)  
+- **Authorization:** Role-based  
+- **Security:** JWT token with cookie-based authentication  
+- **Error Handling:** Global error handling  
 
-Simple Identity implementation with PostgreSQL (login, role-based authorization)
+---
 
-JWT authentication via cookies
+## Frontend
 
-Global error handling
+- **Features:** Registration, login, role-based access  
+- **Routing:** Auth guard for protected routes  
+- **Error Handling:** Global handling & auto logout on 401  
+- **UX:** Custom loading state management  
 
-Frontend
-
-Angular app with registration, login, and role-based authorization
-
-Auth guard for protected routes
-
-Global error handling
-
-Automatic logout on 401 responses
-
-Custom loading state management
+---
