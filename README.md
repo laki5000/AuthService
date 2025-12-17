@@ -12,6 +12,7 @@ A practice project demonstrating a full-stack application with ASP.NET backend a
 - **Authorization:** Role-based  
 - **Security:** JWT token with cookie-based authentication  
 - **Error Handling:** Global error handling  
+- **Testing:** Unit tests with xUnit and Moq
 
 ---
 
