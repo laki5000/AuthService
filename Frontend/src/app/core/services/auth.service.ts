@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoginDto } from '../models/login.dto';
-import { BehaviorSubject, catchError, Observable, of, skip, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, skip, Subject, Subscription, takeUntil, tap } from 'rxjs';
 import { RestService } from './rest.service';
 import { ResultDto } from '../models/result.dto';
 import { RegisterDto } from '../models/register.dto';
@@ -14,6 +14,8 @@ import { RoleDto } from '../models/role.dto';
   providedIn: 'root',
 })
 export class AuthService {
+  private destroy$ = new Subject<void>();
+  
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   loggedIn$ = this.loggedInSubject.asObservable();
   private loggedInSub?: Subscription;
@@ -78,7 +80,7 @@ export class AuthService {
   }
 
   monitorLoginStatus(): void {
-    this.loggedInSub = this.loggedIn$.pipe(skip(1)).subscribe((loggedIn: boolean) => {
+    this.loggedIn$.pipe(skip(1), takeUntil(this.destroy$)).subscribe((loggedIn: boolean) => {
       if (!loggedIn) {
         this.router.navigate([RouteConstants.LOGIN_PATH]);
       }
@@ -86,6 +88,7 @@ export class AuthService {
   }
 
   stopMonitorLoginStatus(): void {
-    this.loggedInSub?.unsubscribe();
+    this.destroy$.next(); 
+    this.destroy$.complete();
   }
 }
