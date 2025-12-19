@@ -3,6 +3,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RolesDialogComponent } from '../../shared/components/roles-dialog/roles-dialog.component';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard.component',
@@ -20,7 +21,7 @@ export class DashboardComponent {
   onRolesClick(): void {
     const dialogRef: MatDialogRef<RolesDialogComponent> = this.openRolesDialog();
 
-    dialogRef.afterOpened().subscribe(() => {
+    dialogRef.afterOpened().pipe(take(1)).subscribe(() => {
       dialogRef.componentInstance.getRoles();
     });
   }
