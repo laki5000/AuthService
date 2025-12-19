@@ -1,5 +1,4 @@
 ﻿using AuthService.Application.Interfaces.Services;
-using AuthService.Domain.Entities;
 using AuthService.Infrastructure.Identity;
 using AuthService.Infrastructure.Security;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +25,7 @@ namespace AuthService.Infrastructure.Persistence
             .AddSignInManager<SignInManager<MyIdentityUser>>();
 
             services.AddScoped<ITokenService, JwtTokenService>();
+            services.AddScoped<IIdentityService, IdentityService>();
 
             return services;
         }

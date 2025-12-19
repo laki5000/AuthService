@@ -1,7 +1,6 @@
 ﻿using AuthService.Api.Filters;
 using AuthService.Application.Interfaces.Services;
 using AuthService.Application.Services;
-using AuthService.Infrastructure.Identity;
 
 namespace AuthService.Api.Extensions
 {
@@ -9,7 +8,6 @@ namespace AuthService.Api.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IAuthService, MyAuthService>();
             return services;
         }
