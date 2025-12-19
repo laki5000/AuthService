@@ -89,6 +89,5 @@ export class AuthService {
 
   stopMonitorLoginStatus(): void {
     this.destroy$.next(); 
-    this.destroy$.complete();
   }
 }
