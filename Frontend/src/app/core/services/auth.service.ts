@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoginDto } from '../models/login.dto';
-import { BehaviorSubject, catchError, Observable, of, skip, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, skip, Subscription, tap } from 'rxjs';
 import { RestService } from './rest.service';
 import { ResultDto } from '../models/result.dto';
 import { RegisterDto } from '../models/register.dto';
@@ -16,6 +16,7 @@ import { RoleDto } from '../models/role.dto';
 export class AuthService {
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   loggedIn$ = this.loggedInSubject.asObservable();
+  private loggedInSub?: Subscription;
 
   constructor(
     private restService: RestService,
@@ -64,11 +65,11 @@ export class AuthService {
     return this.restService.post<ResultDto<string>>(`${AuthApiUrlConstant.updateUserRole}`, body);
   }
 
-  getAll(): Observable<ResultDto<string[]>> {
+  getAllRoles(): Observable<ResultDto<string[]>> {
     return this.restService.get<ResultDto<string[]>>(`${AuthApiUrlConstant.getAllRoles}`);
   }
 
-  create(body: RoleDto): Observable<ResultDto<string>> {
+  createRole(body: RoleDto): Observable<ResultDto<string>> {
     return this.restService.post<ResultDto<string>>(`${AuthApiUrlConstant.createRole}`, body);
   }
 
@@ -77,10 +78,14 @@ export class AuthService {
   }
 
   monitorLoginStatus(): void {
-    this.loggedIn$.pipe(skip(1)).subscribe((loggedIn: boolean) => {
-      if (loggedIn === false) {
+    this.loggedInSub = this.loggedIn$.pipe(skip(1)).subscribe((loggedIn: boolean) => {
+      if (!loggedIn) {
         this.router.navigate([RouteConstants.LOGIN_PATH]);
       }
     });
+  }
+
+  stopMonitorLoginStatus(): void {
+    this.loggedInSub?.unsubscribe();
   }
 }

@@ -43,7 +43,7 @@ export class AddRoleDialogComponent extends BaseFormComponent {
 
   protected override submit(): void {
     const dto = this.form.value as RoleDto;
-    this.authService.create(dto).subscribe({
+    this.authService.createRole(dto).subscribe({
       next: (result: ResultDto<string>) => {
         const roleName = result.Result;
         if (roleName) {

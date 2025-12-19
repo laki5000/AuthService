@@ -6,6 +6,7 @@ import { ResultDto } from '../../../core/models/result.dto';
 import { AddRoleDialogComponent } from '../add-role-dialog/add-role-dialog.component';
 import { UpdateUserRoleDialogComponent } from '../update-user-role-dialog/update-user-role-dialog.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-roles-dialog',
@@ -24,7 +25,7 @@ export class RolesDialogComponent {
   ) {}
 
   getRoles(): void {
-    this.authService.getAll().subscribe({
+    this.authService.getAllRoles().subscribe({
       next: (result: ResultDto<string[]>) => {
         this.roles = result.Result ?? [];
         this.cdr.detectChanges();
@@ -34,7 +35,7 @@ export class RolesDialogComponent {
 
   onAddRoleClick(): void {
     const dialogRef: MatDialogRef<AddRoleDialogComponent> = this.openAddRoleDialog();
-    dialogRef.afterClosed().subscribe((roleName: string) => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe((roleName: string) => {
       if (roleName) {
         this.roles.push(roleName);
         this.cdr.detectChanges();

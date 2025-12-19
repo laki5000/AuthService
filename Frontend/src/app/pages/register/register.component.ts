@@ -10,8 +10,8 @@ import { ValidationErrorDisplayComponent } from '../../shared/components/validat
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { matchFieldValidator } from '../../shared/validators/match-field.validator';
 import { FormGroupErrorKeyConstants } from '../../core/constants/form-error-key.constant';
+import { matchFieldsValidator } from '../../shared/validators/match-field.validator';
 
 @Component({
   selector: 'app-register',
@@ -44,27 +44,25 @@ export class RegisterComponent extends BaseFormComponent {
     this.form = this.fb.group({
       [this.formFields.USERNAME]: ['', Validators.required],
       [this.formFields.EMAIL]: ['', [Validators.required, Validators.email]],
-      [this.formFields.EMAIL_AGAIN]: [
-        '',
-        [
-          Validators.required,
-          Validators.email,
-          matchFieldValidator(this.formFields.EMAIL, FormGroupErrorKeyConstants.EMAILMISMATCH),
-        ],
-      ],
+      [this.formFields.EMAIL_AGAIN]: ['', [Validators.required, Validators.email]],
       [this.formFields.PASSWORD]: ['', Validators.required],
-      [this.formFields.PASSWORD_AGAIN]: [
-        '',
-        [
-          Validators.required,
-          matchFieldValidator(
-            this.formFields.PASSWORD,
-            FormGroupErrorKeyConstants.PASSWORDMISMATCH,
-          ),
-        ],
-      ],
+      [this.formFields.PASSWORD_AGAIN]: ['', Validators.required],
       [this.formFields.FIRST_NAME]: [null],
       [this.formFields.LAST_NAME]: [null],
+    },
+    {
+      validators: [
+        matchFieldsValidator(
+          this.formFields.EMAIL,
+          this.formFields.EMAIL_AGAIN,
+          FormGroupErrorKeyConstants.EMAILMISMATCH
+        ),
+        matchFieldsValidator(
+          this.formFields.PASSWORD,
+          this.formFields.PASSWORD_AGAIN,
+          FormGroupErrorKeyConstants.PASSWORDMISMATCH
+        ),
+      ],
     });
   }
 

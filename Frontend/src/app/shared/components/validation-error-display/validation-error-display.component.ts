@@ -16,7 +16,6 @@ export class ValidationErrorDisplayComponent {
 
   get errorMessage(): string | null {
     if (!this.control) return null;
-
     const errors = this.control.errors;
     if (errors && Object.keys(errors).length > 0) {
       for (const key of Object.keys(errors)) {
