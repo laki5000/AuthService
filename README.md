@@ -1,6 +1,6 @@
-# ASP.NET + Angular Practice Project
+# ASP.NET + Angular Authentication & Authorization Practice Project
 
-A practice project demonstrating a full-stack application with ASP.NET backend and Angular frontend.
+A practice project demonstrating authentication, authorization, and secure access control in a full-stack application built with ASP.NET and Angular.
 
 ---
 
